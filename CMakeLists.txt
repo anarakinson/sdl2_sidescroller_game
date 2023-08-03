@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.12)
 
 project(sdl_test)
 
+
+set(SDL_PATH $ENV{SDL_LIBRARY})
+
+
 add_executable(
     game 
     main.cpp
@@ -9,13 +13,13 @@ add_executable(
     source/game.cpp
 )
 
-message($ENV{SDL_LIBRARY})
+message("SDL_LIBRARY path: " ${SDL_PATH})
 
 target_include_directories(
     game 
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/headers/
-    $ENV{SDL_LIBRARY}/include/
+    ${SDL_PATH}/include/
 )
 
 link_directories(
@@ -24,7 +28,7 @@ link_directories(
 
 target_link_libraries(
     game 
-    $ENV{SDL_LIBRARY}/lib/x64/SDL2.lib
+    ${SDL_PATH}/lib/x64/SDL2.lib
 )
 
 add_custom_target(
@@ -40,3 +44,15 @@ set_target_properties(
     SXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
+
+if (MSVC)
+    target_compile_options(
+        tests PRIVATE
+        /W4
+    )
+else ()
+    target_compile_options(
+        tests PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
+endif()
