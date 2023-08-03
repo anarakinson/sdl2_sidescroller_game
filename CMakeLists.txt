@@ -14,8 +14,7 @@ target_include_directories(
     game 
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/headers/
-    # "$ENV{SDL_LIBRARY}/include/"
-    "D:/Programs/SDL2-2.28.2/include/"
+    "$ENV{SDL_LIBRARY}/include/"
 )
 
 link_directories(
@@ -24,8 +23,7 @@ link_directories(
 
 target_link_libraries(
     game 
-    # "$ENV{SDL_LIBRARY}/lib/x64/SDL2.lib"
-    "D:/Programs/SDL2-2.28.2/lib/x64/SDL2.lib"
+    "$ENV{SDL_LIBRARY}/lib/x64/SDL2.lib"
 )
 
 add_custom_target(
