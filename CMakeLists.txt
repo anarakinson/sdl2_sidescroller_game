@@ -9,12 +9,13 @@ add_executable(
     source/game.cpp
 )
 
+message($ENV{SDL_LIBRARY})
 
 target_include_directories(
     game 
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/headers/
-    "$ENV{SDL_LIBRARY}/include/"
+    $ENV{SDL_LIBRARY}/include/
 )
 
 link_directories(
@@ -23,7 +24,7 @@ link_directories(
 
 target_link_libraries(
     game 
-    "$ENV{SDL_LIBRARY}/lib/x64/SDL2.lib"
+    $ENV{SDL_LIBRARY}/lib/x64/SDL2.lib
 )
 
 add_custom_target(
