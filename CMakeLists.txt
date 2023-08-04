@@ -3,9 +3,6 @@ cmake_minimum_required(VERSION 3.12)
 project(sdl_test)
 
 
-set(SDL_PATH $ENV{SDL_LIBRARY})
-
-
 add_executable(
     game 
     main.cpp
@@ -13,30 +10,29 @@ add_executable(
     source/game.cpp
 )
 
-message("SDL_LIBRARY path: " ${SDL_PATH})
+
+find_package(SDL2 CONFIG REQUIRED)
+find_package(SDL2_image CONFIG REQUIRED)
+
+
+target_link_libraries(
+    game
+    PRIVATE
+    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+    $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+    $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>
+)
+
 
 target_include_directories(
     game 
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/headers/
-    ${SDL_PATH}/include/
 )
 
 link_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/source/
 )
-
-target_link_libraries(
-    game 
-    ${SDL_PATH}/lib/x64/SDL2.lib
-)
-
-add_custom_target(
-    copy_dll
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/SDL2.dll ${CMAKE_BINARY_DIR}/Debug/SDL2.dll
-)
-
-add_dependencies(game copy_dll)
 
 
 set_target_properties(
@@ -45,14 +41,15 @@ set_target_properties(
     CXX_STANDARD_REQUIRED ON
 )
 
+
 if (MSVC)
     target_compile_options(
-        tests PRIVATE
+        game PRIVATE
         /W4
     )
 else ()
     target_compile_options(
-        tests PRIVATE
+        game PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
 endif()
