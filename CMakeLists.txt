@@ -8,6 +8,7 @@ add_executable(
     main.cpp
     source/test.cpp
     source/game.cpp
+    source/game_map.cpp
 )
 
 
@@ -27,10 +28,12 @@ target_link_libraries(
 target_include_directories(
     game 
     PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/headers/
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/
 )
 
-link_directories(
+target_link_directories(
+    game
+    PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/source/
 )
 
