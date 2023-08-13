@@ -11,7 +11,7 @@ public:
     static SDL_Texture *LoadTexture(const char *filename) {
         
         SDL_Surface *temp_surface = IMG_Load(filename);
-        SDL_Texture *texture = SDL_CreateTextureFromSurface(gameloop::Game::renderer, temp_surface);
+        SDL_Texture *texture = SDL_CreateTextureFromSurface(Game::renderer(), temp_surface);
         SDL_FreeSurface(temp_surface);
 
         return texture;    
@@ -19,7 +19,7 @@ public:
     }
 
     static void Draw(SDL_Texture *texture, SDL_Rect src_rect, SDL_Rect dst_rect) {
-        SDL_RenderCopy(gameloop::Game::renderer, texture, &src_rect, &dst_rect);
+        SDL_RenderCopy(Game::renderer(), texture, &src_rect, &dst_rect);
     }
     
 };
