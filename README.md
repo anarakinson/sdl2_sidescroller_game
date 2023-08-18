@@ -22,19 +22,19 @@
    - для windows install.cmd
    - для unix install.sh
 3. Установить необходимые библиотеки. Для этого:
-1. Либо из директории **vcpkg_install** запустить скрипт:
-   - для windows pkg_install.cmd
-   - для unix pkg_install.sh
-2. (Предпочтительный вариант) Либо открыть соответствующий файл в текстовом редакторе и установить библиотеки вручную, с учетом используемой операционной системы
-    как пример:
-     ```bash
-     ./vcpkg/vcpkg.exe install sdl2:x64-linux
-     ``` 
+   1. Либо из директории **vcpkg_install** запустить скрипт:
+     - для windows pkg_install.cmd
+     - для unix pkg_install.sh
+   2. (Предпочтительный вариант) Либо открыть соответствующий файл в текстовом редакторе и установить библиотеки вручную, с учетом используемой операционной системы
+      - как пример:
+      ```bash
+      ./vcpkg/vcpkg.exe install sdl2:x64-linux
+      ``` 
 5. Запустить сборку через cmake в корневой директории проекта:
-   ```powershell
-   cmake -B build
-   cmake --build build
-   ```
+      ```powershell
+      cmake -B build
+      cmake --build build
+      ```
 
 ---
 
