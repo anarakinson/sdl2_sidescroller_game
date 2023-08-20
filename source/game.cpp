@@ -54,7 +54,7 @@ void Game::update() {
             std::cout << "COLLISION" << std::endl;
         }
     }
-
+    
 }
 
 
