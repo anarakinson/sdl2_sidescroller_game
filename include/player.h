@@ -14,6 +14,11 @@ public:
     Player(int x, int y, const char *texturesheet) : m_x{x}, m_y{y} {
         m_texture = TextureManager::LoadTexture(texturesheet);
         std::cout << "Player character created" << std::endl;
+        
+        m_src_rect.x = 500;        // source image coordinates on tileset 
+        m_src_rect.y = 90; 
+        m_src_rect.w = 140;      // source image width and height on tileset 
+        m_src_rect.h = 140; 
     }
     ~Player() {
         SDL_DestroyTexture(m_texture);
@@ -38,11 +43,6 @@ public:
             if (m_velocity < m_max_speed) { ++m_velocity; } 
             m_y += m_velocity; 
         }
-
-        m_src_rect.x = 500;        // source image coordinates on tileset 
-        m_src_rect.y = 90; 
-        m_src_rect.w = 140;      // source image width and height on tileset 
-        m_src_rect.h = 140; 
 
         m_dst_rect.x = m_x;      // game object coordinates in game
         m_dst_rect.y = m_y;

@@ -62,7 +62,6 @@ void Game::render() {
     SDL_RenderClear(TextureManager::renderer);
 
     // rendering
-    m_current_level->draw_map();
     m_player->render();
     for (auto &entity : m_content) {
         entity->render();

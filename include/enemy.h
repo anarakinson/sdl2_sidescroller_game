@@ -11,6 +11,12 @@ class Enemy : virtual public Entity {
 public:
     Enemy(int x, int y, const char *texturesheet) : m_x{x}, m_y{y} {
         m_texture = TextureManager::LoadTexture(texturesheet);
+        
+        m_src_rect.x = 180;        // source image coordinates on tileset 
+        m_src_rect.y = 90; 
+        m_src_rect.w = 140;      // source image width and height on tileset 
+        m_src_rect.h = 140; 
+        
     }
     ~Enemy() {
         SDL_DestroyTexture(m_texture);
@@ -27,11 +33,6 @@ public:
         else { --m_x; }
         if (move_down) { ++m_y; }
         else { --m_y; }
-
-        m_src_rect.x = 180;        // source image coordinates on tileset 
-        m_src_rect.y = 90; 
-        m_src_rect.w = 140;      // source image width and height on tileset 
-        m_src_rect.h = 140; 
 
         m_dst_rect.x = m_x;      // game object coordinates in game
         m_dst_rect.y = m_y;

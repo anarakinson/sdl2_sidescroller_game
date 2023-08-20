@@ -8,7 +8,6 @@ add_executable(
     main.cpp
     source/test.cpp
     source/game.cpp
-    source/game_map.cpp
     source/collision.cpp
 )
 

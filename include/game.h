@@ -3,7 +3,6 @@
 #include <entity.h>
 #include <player.h>
 #include <collision.h>
-#include <game_map.h>
 
 #include <iostream>
 #include <SDL2/SDL.h>
@@ -28,11 +27,6 @@ public:
         m_content.emplace_back(std::move(entity)); 
     }
 
-    void set_level(std::unique_ptr<level::Map> &&map) { 
-        std::cout << "Entity added" << std::endl;
-        m_current_level = std::move(map); 
-    }
-
     bool is_running() { return m_running; } 
 
     // static SDL_Renderer *renderer(); // { return m_renderer; }
@@ -53,7 +47,6 @@ private:
     int m_w = 0;
     int m_h = 0;
 
-    std::unique_ptr<level::Map> m_current_level{};
     std::vector<std::unique_ptr<Entity>> m_content;
     std::unique_ptr<Player> m_player{nullptr};
 
