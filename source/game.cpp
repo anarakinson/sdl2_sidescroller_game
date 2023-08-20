@@ -15,11 +15,11 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
     m_h = h;
 
     int params = 0;
-    if (foolscreen) {                                             // set screen mode
+    if (foolscreen) {                                                 // set screen mode
         params = SDL_WINDOW_FULLSCREEN;
     }
 
-    if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {                     // if sdl initialize
+    if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {                         // if sdl initialize
         std::cout << "Initialize subsystem..." << std::endl;   
         m_window = SDL_CreateWindow(title, m_x, m_y, m_w, m_h, params);   // create window
         if (m_window) {
