@@ -12,6 +12,9 @@ public:
     Enemy(int x, int y, const char *texturesheet) : m_x{x}, m_y{y} {
         m_texture = TextureManager::LoadTexture(texturesheet);
     }
+    ~Enemy() {
+        SDL_DestroyTexture(m_texture);
+    }
 
     void init() override {}
     void update() override { 
@@ -41,8 +44,10 @@ public:
 
     }
     void render() override { 
-        SDL_RenderCopyEx(Game::renderer(), m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
-     }
+        SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
+    }
+
+    SDL_Rect collider() override { return m_dst_rect; }
 
 private:
     int m_x = 0;

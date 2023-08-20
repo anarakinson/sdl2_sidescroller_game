@@ -2,6 +2,7 @@
 
 #include <game.h>
 #include <entity.h>
+#include <collision.h>
 #include <texture_manager.h>
 
 #include <iostream>
@@ -13,6 +14,9 @@ public:
     Player(int x, int y, const char *texturesheet) : m_x{x}, m_y{y} {
         m_texture = TextureManager::LoadTexture(texturesheet);
         std::cout << "Player character created" << std::endl;
+    }
+    ~Player() {
+        SDL_DestroyTexture(m_texture);
     }
 
     void init() override {}
@@ -34,7 +38,7 @@ public:
             if (m_velocity < m_max_speed) { ++m_velocity; } 
             m_y += m_velocity; 
         }
-        
+
         m_src_rect.x = 500;        // source image coordinates on tileset 
         m_src_rect.y = 90; 
         m_src_rect.w = 140;      // source image width and height on tileset 
@@ -44,31 +48,21 @@ public:
         m_dst_rect.y = m_y;
         m_dst_rect.w = 64;       // game object size in game
         m_dst_rect.h = 64;
-    
+        
     }
     void render() override { 
         // SDL_RenderCopy(Game::renderer(), m_texture, &m_src_rect, &m_dst_rect);
         if (!m_right_direction) { m_flip = SDL_FLIP_HORIZONTAL; }
         else { m_flip = SDL_FLIP_NONE; }
-        SDL_RenderCopyEx(Game::renderer(), m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
-     }
+        SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
+    }
 
-    void move_left(bool state) {
-        m_move_right = false;
-        m_move_left = state;
-    }
-    void move_right(bool state) {
-        m_move_right = state;
-        m_move_left = false;
-    }
-    void move_up(bool state) {
-        m_move_up = state;
-        m_move_down = false;
-    }
-    void move_down(bool state) {
-        m_move_up = false;
-        m_move_down = state;
-    }
+    void move_left(bool state) { m_move_left = state; }
+    void move_right(bool state) { m_move_right = state; }
+    void move_up(bool state) { m_move_up = state; }
+    void move_down(bool state) { m_move_down = state; }
+
+    SDL_Rect collider() override { return m_dst_rect; }
 
 private:
     int m_x = 0;
@@ -99,4 +93,5 @@ private:
     SDL_Rect m_src_rect{}; 
     SDL_Rect m_dst_rect{};
     SDL_Point m_center{NULL};
+
 };

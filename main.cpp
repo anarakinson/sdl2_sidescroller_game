@@ -3,6 +3,8 @@
 #include <entity.h>
 #include <player.h>
 #include <enemy.h>
+#include <game_map.h>
+#include <levels/level1.h>
 
 #include <iostream>
 #include <SDL2/SDL.h>
@@ -25,11 +27,14 @@ int main() {
     static Game game;
     game.init("game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height);
 
-    // std::unique_ptr<Player> player{new Player{0, 0, "assets/packman_set.png"}};
-    // game.add_entity(std::move(player));
+    // add enemy
     std::unique_ptr<Enemy> enemy{new Enemy{100, 100, "assets/packman_set.png"}};
     game.add_entity(std::move(enemy));
 
+    // // set level map
+    std::unique_ptr<level::Map> level1_map{new level::Map(lvl1)};
+    game.set_level(std::move(level1_map));
+    
     // set frame rate variables
     uint32_t frame_start;
     int frame_duration;

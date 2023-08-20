@@ -15,6 +15,8 @@ public:
     virtual void render() {}
 
 
+    virtual SDL_Rect collider() { return m_dst_rect; }
+
 private:
     int m_x = 0;
     int m_y = 0;

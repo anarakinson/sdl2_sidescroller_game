@@ -1,13 +1,15 @@
 #pragma once 
 
 #include <entity.h>
+#include <player.h>
+#include <collision.h>
+#include <game_map.h>
 
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <vector>
 
-class Player;
 
 class Game {
 public:
@@ -26,9 +28,14 @@ public:
         m_content.emplace_back(std::move(entity)); 
     }
 
+    void set_level(std::unique_ptr<level::Map> &&map) { 
+        std::cout << "Entity added" << std::endl;
+        m_current_level = std::move(map); 
+    }
+
     bool is_running() { return m_running; } 
 
-    static SDL_Renderer *renderer(); // { return m_renderer; }
+    // static SDL_Renderer *renderer(); // { return m_renderer; }
     // static SDL_Event event() {}
     
     int window_height() { return m_h; }   
@@ -37,9 +44,8 @@ public:
 
 private:
     SDL_Window *m_window;
-    static SDL_Renderer *m_renderer;
-    // static SDL_Event m_event;
-
+    // static SDL_Renderer *m_renderer;
+    
     bool m_running = false;
 
     int m_x = 0;   // game window parameters
@@ -47,6 +53,7 @@ private:
     int m_w = 0;
     int m_h = 0;
 
+    std::unique_ptr<level::Map> m_current_level{};
     std::vector<std::unique_ptr<Entity>> m_content;
     std::unique_ptr<Player> m_player{nullptr};
 

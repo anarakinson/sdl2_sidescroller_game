@@ -1,11 +1,11 @@
 #include <game.h>
 #include <player.h>
+#include <collision.h>
 #include <texture_manager.h>
 
 
 
-SDL_Renderer *Game::renderer() { return m_renderer; }
-SDL_Renderer *Game::m_renderer = nullptr;
+SDL_Renderer *TextureManager::renderer = nullptr;
 
 void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) {
 
@@ -26,9 +26,9 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
             std::cout << "Window created" << std::endl;
         }
 
-        m_renderer = SDL_CreateRenderer(m_window, -1, 0);               // create renderer
-        if (m_renderer) {
-            SDL_SetRenderDrawColor(m_renderer, 100, 100, 100, 100);
+        TextureManager::renderer = SDL_CreateRenderer(m_window, -1, 0);               // create renderer
+        if (TextureManager::renderer) {
+            SDL_SetRenderDrawColor(TextureManager::renderer, 100, 100, 100, 100);
             std::cout << "Window rendered" << std::endl;
         }
 
@@ -46,32 +46,35 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
 
 
 void Game::update() {
-    
     // update state
     m_player->update();
     for (auto &entity : m_content) {
         entity->update();
+        if (Collision::is_collide(m_player->collider(), entity->collider())) {
+            std::cout << "COLLISION" << std::endl;
+        }
     }
 
 }
 
 
 void Game::render() {
-    SDL_RenderClear(m_renderer);
+    SDL_RenderClear(TextureManager::renderer);
 
     // rendering
+    m_current_level->draw_map();
     m_player->render();
     for (auto &entity : m_content) {
         entity->render();
     }
 
-    SDL_RenderPresent(m_renderer);
+    SDL_RenderPresent(TextureManager::renderer);
 }
 
 
 void Game::clean() {
     SDL_DestroyWindow(m_window);          // destroy renderer and window
-    SDL_DestroyRenderer(m_renderer);
+    SDL_DestroyRenderer(TextureManager::renderer);
     SDL_Quit();
 
     std::cout << "Quit the game" << std::endl;
@@ -88,10 +91,22 @@ void Game::handle_events() {
             break;
         case SDL_KEYDOWN:
             // std::cout << "key down" << std::endl;
-            if (event.key.keysym.sym == SDLK_LEFT) { m_player->move_left(true); }
-            else if (event.key.keysym.sym == SDLK_RIGHT) { m_player->move_right(true); }
-            if (event.key.keysym.sym == SDLK_UP) { m_player->move_up(true); }
-            else if (event.key.keysym.sym == SDLK_DOWN) { m_player->move_down(true); }
+            if (event.key.keysym.sym == SDLK_LEFT) { 
+                m_player->move_left(true); 
+                m_player->move_right(false); 
+            }
+            else if (event.key.keysym.sym == SDLK_RIGHT) { 
+                m_player->move_right(true); 
+                m_player->move_left(false); 
+            }
+            if (event.key.keysym.sym == SDLK_UP) { 
+                m_player->move_up(true); 
+                m_player->move_down(false); 
+            }
+            else if (event.key.keysym.sym == SDLK_DOWN) { 
+                m_player->move_down(true); 
+                m_player->move_up(false); 
+            }
             break;
         case SDL_KEYUP:
             // std::cout << "key up" << std::endl; 
@@ -105,6 +120,8 @@ void Game::handle_events() {
         default:
             break;
     }
+
 }
+
 
 
