@@ -4,7 +4,13 @@
 #include <texture_manager.h>
 
 
+template <class T>
+std::unique_ptr<T> copy_unique(const std::unique_ptr<T> &source) {
+    return source ? std::make_unique<T>(*source) : nullptr;
+}
 
+// set up entity counter
+int Entity::counter = 0;
 SDL_Renderer *TextureManager::renderer = nullptr;
 
 void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) {
@@ -48,13 +54,21 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
 void Game::update() {
     // update state
     m_player->update();
+    
     for (auto &entity : m_content) {
-        entity->update();
-        if (Collision::is_collide(m_player->collider(), entity->collider())) {
-            std::cout << "COLLISION" << std::endl;
+        entity->update();  
+        for (auto &other_entity : m_content) {
+            if (
+                Collision::is_collide(m_player->collider(), entity->collider()) 
+                || (entity->index != other_entity->index &&                     // not compare entity with itself
+                    entity->type() != "tile" &&                                 // not compare tiles
+                    Collision::is_collide(entity->collider(), other_entity->collider()))
+            ) {
+                std::cout << "Collision detected for entity " << entity->index << std::endl;
+            }
         }
     }
-    
+
 }
 
 
@@ -66,7 +80,7 @@ void Game::render() {
     for (auto &entity : m_content) {
         entity->render();
     }
-
+    
     SDL_RenderPresent(TextureManager::renderer);
 }
 
@@ -121,6 +135,4 @@ void Game::handle_events() {
     }
 
 }
-
-
 

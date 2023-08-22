@@ -6,6 +6,7 @@
 #include <texture_manager.h>
 
 #include <iostream>
+#include <string>
 #include <math.h>
 
 
@@ -56,6 +57,7 @@ public:
         else { m_flip = SDL_FLIP_NONE; }
         SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
     }
+    std::string type() override { return "player"; }
 
     void move_left(bool state) { m_move_left = state; }
     void move_right(bool state) { m_move_right = state; }

@@ -1,21 +1,27 @@
 #pragma once 
 
 #include <iostream>
+#include <string>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
 
 class Entity {
 public:
-    explicit Entity() = default;
+    explicit Entity() { index = counter++; };
     virtual ~Entity() {}
 
     virtual void init() {}
     virtual void update() {}
     virtual void render() {}
 
+    virtual std::string type() { return "basic entity"; }
+
 
     virtual SDL_Rect collider() { return m_dst_rect; }
+
+    static int counter;
+    int index;
 
 private:
     int m_x = 0;

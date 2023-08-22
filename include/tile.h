@@ -6,7 +6,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <vector>
+#include <string>
 #include <vector>
 
 
@@ -41,6 +41,7 @@ public:
     void render() override { 
         SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
     }
+    std::string type() override { return "tile"; }
 
     void set_source_params(int x, int y, int w, int h) {
         m_src_rect.x = x;

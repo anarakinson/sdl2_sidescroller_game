@@ -5,6 +5,7 @@
 #include <texture_manager.h>
 
 #include <iostream>
+#include <string>
 
 
 class Enemy : virtual public Entity {
@@ -43,6 +44,7 @@ public:
     void render() override { 
         SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
     }
+    std::string type() override { return "enemy"; }
 
     SDL_Rect collider() override { return m_dst_rect; }
 

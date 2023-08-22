@@ -3,6 +3,7 @@
 #include <entity.h>
 #include <player.h>
 #include <collision.h>
+#include <statement_manager.h>
 
 #include <iostream>
 #include <SDL2/SDL.h>
@@ -22,10 +23,14 @@ public:
     void clean();
     void handle_events();
 
-    void add_entity(std::unique_ptr<Entity> &&entity) { 
-        std::cout << "Entity added" << std::endl;
+    void add_entity(std::shared_ptr<Entity> &&entity) noexcept { 
+        std::cout << "Entity " << entity->index << " added" << std::endl;
         m_content.emplace_back(std::move(entity)); 
     }
+    // void add_tile(std::unique_ptr<Entity> &&entity) { 
+    //     std::cout << "Tile added" << std::endl;
+    //     m_tiles.emplace_back(std::move(entity)); 
+    // }
 
     bool is_running() { return m_running; } 
 
@@ -47,8 +52,10 @@ private:
     int m_w = 0;
     int m_h = 0;
 
-    std::vector<std::unique_ptr<Entity>> m_content;
+    std::vector<std::shared_ptr<Entity>> m_content{};
+    // std::vector<std::unique_ptr<Entity>> m_tiles{};
     std::unique_ptr<Player> m_player{nullptr};
+    ObjectStatementManager statement_manager{};
 
 };
 
