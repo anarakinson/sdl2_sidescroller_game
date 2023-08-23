@@ -20,13 +20,13 @@ public:
     }
     
     Tile(int x, int y, int w, int h, const char *path) {
-        m_x = x;
-        m_y = y;
-        m_w = w;
-        m_h = h;
+        m_position.x = x;
+        m_position.y = y;
+        m_position.w = w;
+        m_position.h = h;
 
-        m_dst_rect.x = m_x;
-        m_dst_rect.y = m_y;
+        m_dst_rect.x = m_position.x;
+        m_dst_rect.y = m_position.y;
         m_texture = TextureManager::LoadTexture(path);
 
         m_src_rect.x = 0;        // source image coordinates on tileset 
@@ -38,10 +38,10 @@ public:
     
     void init() override {}
     void update() override {
-        m_dst_rect.x = m_x;      // game object coordinates in game
-        m_dst_rect.y = m_y;
-        m_dst_rect.w = m_w;       // game object size in game
-        m_dst_rect.h = m_h;
+        m_dst_rect.x = m_position.x;      // game object coordinates in game
+        m_dst_rect.y = m_position.y;
+        m_dst_rect.w = m_position.w;       // game object size in game
+        m_dst_rect.h = m_position.h;
     }
     void render() override { 
         SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
@@ -55,26 +55,17 @@ public:
         m_src_rect.h = h;
     }
 
-    void set_dest_params(int x, int y, int w, int h) {
-        m_dst_rect.x = x;
-        m_dst_rect.y = y;
-        m_dst_rect.w = w;
-        m_dst_rect.h = h;
-    }
-
-    void set_x(int x) { m_dst_rect.x = x; }
-    void set_y(int y) { m_dst_rect.y = y; }
+    void set_x(int x) { m_position.x = x; }
+    void set_y(int y) { m_position.y = y; }
     
-    int get_x() { return m_dst_rect.x; }
-    int get_y() { return m_dst_rect.y; }
-    int get_w() { return m_dst_rect.w; }
-    int get_h() { return m_dst_rect.h; }
+    int get_x() { return m_position.x; }
+    int get_y() { return m_position.y; }
+    int get_w() { return m_position.w; }
+    int get_h() { return m_position.h; }
 
     SDL_Texture *texture() { return m_texture; } 
     SDL_Rect scr_rect() { return m_src_rect; } 
     SDL_Rect dst_rect() { return m_dst_rect; } 
-
-    SDL_Rect collider() { return m_dst_rect; }
 
 
 private:

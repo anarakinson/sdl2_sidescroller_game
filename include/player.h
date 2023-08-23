@@ -13,8 +13,11 @@
 class Player : public Entity {
 public:
     Player(int x, int y, const char *texturesheet) {
-        m_x = x;
-        m_y = y;
+        m_position.x = x;
+        m_position.y = y;
+        m_position.w = 64;
+        m_position.h = 64;
+        
         m_texture = TextureManager::LoadTexture(texturesheet);
         std::cout << "Player character created" << std::endl;
         
@@ -31,26 +34,40 @@ public:
     void update() override { 
         if (m_move_left) { 
             if (m_right_direction) { m_right_direction = !m_right_direction; }
-            if (m_velocity < m_max_speed) { ++m_velocity; }
-            m_x -= m_velocity; 
-        }
+            if (std::abs(velocity.x) < m_max_speed) { --velocity.x; }
+        } else {}
         if (m_move_right) { 
             if (!m_right_direction) { m_right_direction = !m_right_direction; }
-            if (m_velocity < m_max_speed) { ++m_velocity; }
-            m_x += m_velocity; }
+            if (std::abs(velocity.x) < m_max_speed) { ++velocity.x; }
+        }
         if (m_move_up) { 
-            if (m_velocity < m_max_speed) { ++m_velocity; }
-            m_y -= m_velocity; 
+            if (std::abs(velocity.y) < m_max_speed) { --velocity.y; }
         }
         if (m_move_down) {
-            if (m_velocity < m_max_speed) { ++m_velocity; } 
-            m_y += m_velocity; 
+            if (std::abs(velocity.y) < m_max_speed) { ++velocity.y; } 
         }
 
-        m_dst_rect.x = m_x;      // game object coordinates in game
-        m_dst_rect.y = m_y;
-        m_dst_rect.w = 64;       // game object size in game
-        m_dst_rect.h = 64;
+        if (is_collide()) { velocity *= -2; }
+
+        m_position += velocity;
+
+        if (is_collide()) { velocity = 0; m_is_collide = false; }
+
+
+        if (!m_move_left && !m_move_right) {
+            if (velocity.x < 0) { ++velocity.x; }
+            if (velocity.x > 0) { --velocity.x; }
+        }
+        if (!m_move_up && !m_move_down) {
+            if (velocity.y < 0) { ++velocity.y; }
+            if (velocity.y > 0) { --velocity.y; }
+        }
+    
+
+        m_dst_rect.x = m_position.x;      // game object coordinates in game
+        m_dst_rect.y = m_position.y;
+        m_dst_rect.w = m_position.w;       // game object size in game
+        m_dst_rect.h = m_position.h;
         
     }
     void render() override { 
@@ -66,7 +83,9 @@ public:
     void move_up(bool state) { m_move_up = state; }
     void move_down(bool state) { m_move_down = state; }
 
-    SDL_Rect collider() override { return m_dst_rect; }
+    // Vector2D velocity() { return m_velocity; }                                 // get velocity
+    // void velocity(int x, int y) { m_velocity.x = x; m_velocity.y = y; }        // set velocity
+
 
 private:
 
@@ -79,6 +98,5 @@ private:
 
     int m_max_speed = 10;
     int m_speed = 0;
-    int m_velocity = 0;
     
 };

@@ -7,12 +7,67 @@
 
 
 
+class Vector2D {
+public:
+    int x = 0;
+    int y = 0;
+
+    Vector2D operator *= (int modifier) { 
+        x *= modifier;
+        y *= modifier;
+        
+        return *this; 
+    }
+    Vector2D operator /= (int modifier) { 
+        x /= modifier;
+        y /= modifier;
+        
+        return *this; 
+    }
+    Vector2D operator += (int modifier) { 
+        x += modifier;
+        y += modifier;
+        
+        return *this; 
+    }
+    Vector2D operator -= (int modifier) { 
+        x -= modifier;
+        y -= modifier;
+        
+        return *this; 
+    }
+
+    void operator = (int value) { x = value; y = value; }
+};
+
 class Position2D {
 public:
     int x = 0;
     int y = 0;
     int w = 0;
     int h = 0;
+
+    Position2D operator += (Vector2D vector) {
+        x += vector.x;
+        y += vector.y;
+        return *this;
+    }    
+    Position2D operator -= (Vector2D vector) {
+        x -= vector.x;
+        y -= vector.y;
+        return *this;
+    }    
+    Position2D operator *= (Vector2D vector) {
+        x *= vector.x;
+        y *= vector.y;
+        return *this;
+    }    
+    Position2D operator /= (Vector2D vector) {
+        x /= vector.x;
+        y /= vector.y;
+        return *this;
+    }    
+
 };
 
 
@@ -27,17 +82,19 @@ public:
 
     virtual std::string type() { return "basic entity"; }
 
+    bool is_collide() { return m_is_collide; }
+    void collide() { m_is_collide = true; }
+
 
     virtual SDL_Rect collider() { return m_dst_rect; }
 
     static int counter;
     int index;
 
+    Vector2D velocity{};
+    Position2D m_position{};
+
 protected:
-    int m_x = 0;
-    int m_y = 0;
-    int m_w = 0;
-    int m_h = 0;
     
     double m_angle = 0;
 
@@ -48,5 +105,7 @@ protected:
     SDL_Rect m_src_rect{}; 
     SDL_Rect m_dst_rect{};
     SDL_Point m_center{NULL};
+
+    bool m_is_collide = false;
 
 };

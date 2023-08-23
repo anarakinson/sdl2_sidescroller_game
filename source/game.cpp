@@ -59,15 +59,19 @@ void Game::update() {
         entity->update();  
         for (auto &other_entity : m_content) {
             if (
-                Collision::is_collide(m_player->collider(), entity->collider()) 
-                || (entity->index != other_entity->index &&                     // not compare entity with itself
-                    entity->type() != "tile" &&                                 // not compare tiles
-                    Collision::is_collide(entity->collider(), other_entity->collider()))
+                Collision::is_collide(m_player->collider(), entity->collider()) ||
+                m_player->m_position.x < 0 || m_player->m_position.y < 0 || 
+                (m_player->m_position.x + m_player->m_position.w) > m_w || (m_player->m_position.y + m_player->m_position.h) > m_h
+            ) {
+                m_player->collide();
+            }
+            if (
+                entity->index != other_entity->index &&                     // not compare entity with itself
+                entity->type() != "tile" &&                                 // not compare tiles
+                Collision::is_collide(entity->collider(), other_entity->collider())
             ) {
                 std::cout << "Collision detected for entity " << entity->index << std::endl;
-                // if (intity->type != "tyle") {
-                //     entity->velocity * -1;
-                // }
+                entity->collide();
             }
         }
     }
