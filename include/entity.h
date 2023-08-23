@@ -38,6 +38,7 @@ public:
     }
 
     void operator = (int value) { x = value; y = value; }
+    bool operator == (int value) { return x == value && y == value; }
 };
 
 class Position2D {

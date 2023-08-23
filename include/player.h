@@ -31,8 +31,18 @@ public:
     }
 
     void init() override {}
-    void update() override { 
-        if (m_move_left) { 
+    void update() override {
+
+        if (is_collide()) {                               // move backward collision and stop process input 
+            velocity *= -1; 
+            m_is_collide = false;
+            m_move_left = m_move_right = m_move_down = m_move_up = false;
+        }
+
+        if (m_move_down && m_move_right) { m_move_left = false; }              // resolve inconsistent input
+        if (m_move_up && m_move_down) { m_move_down = false; }
+
+        if (m_move_left) {                                                     // process input
             if (m_right_direction) { m_right_direction = !m_right_direction; }
             if (std::abs(velocity.x) < m_max_speed) { --velocity.x; }
         } else {}
@@ -47,14 +57,10 @@ public:
             if (std::abs(velocity.y) < m_max_speed) { ++velocity.y; } 
         }
 
-        if (is_collide()) { velocity *= -2; }
-
-        m_position += velocity;
-
-        if (is_collide()) { velocity = 0; m_is_collide = false; }
+        m_position += velocity;                                      // update position
 
 
-        if (!m_move_left && !m_move_right) {
+        if (!m_move_left && !m_move_right) {                         // stop movement when no input
             if (velocity.x < 0) { ++velocity.x; }
             if (velocity.x > 0) { --velocity.x; }
         }
