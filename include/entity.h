@@ -6,6 +6,16 @@
 #include <SDL2/SDL_image.h>
 
 
+
+class Position2D {
+public:
+    int x = 0;
+    int y = 0;
+    int w = 0;
+    int h = 0;
+};
+
+
 class Entity {
 public:
     explicit Entity() { index = counter++; };
@@ -23,9 +33,11 @@ public:
     static int counter;
     int index;
 
-private:
+protected:
     int m_x = 0;
     int m_y = 0;
+    int m_w = 0;
+    int m_h = 0;
     
     double m_angle = 0;
 

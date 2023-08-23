@@ -10,9 +10,11 @@
 #include <math.h>
 
 
-class Player : virtual public Entity {
+class Player : public Entity {
 public:
-    Player(int x, int y, const char *texturesheet) : m_x{x}, m_y{y} {
+    Player(int x, int y, const char *texturesheet) {
+        m_x = x;
+        m_y = y;
         m_texture = TextureManager::LoadTexture(texturesheet);
         std::cout << "Player character created" << std::endl;
         
@@ -67,10 +69,7 @@ public:
     SDL_Rect collider() override { return m_dst_rect; }
 
 private:
-    int m_x = 0;
-    int m_y = 0;
-    
-    double m_angle = 0;
+
     bool m_right_direction = true;
 
     bool m_move_left = false;
@@ -78,22 +77,8 @@ private:
     bool m_move_up = false;
     bool m_move_down = false;
 
-    struct velocity {
-        int x = 0;
-        int y = 0;
-    };
-
     int m_max_speed = 10;
     int m_speed = 0;
     int m_velocity = 0;
     
-
-    // SDL_RendererFlip flip = SDL_FLIP_NONE | SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL;
-    SDL_RendererFlip m_flip = SDL_FLIP_NONE;
-
-    SDL_Texture *m_texture;
-    SDL_Rect m_src_rect{}; 
-    SDL_Rect m_dst_rect{};
-    SDL_Point m_center{NULL};
-
 };

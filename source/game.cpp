@@ -65,6 +65,9 @@ void Game::update() {
                     Collision::is_collide(entity->collider(), other_entity->collider()))
             ) {
                 std::cout << "Collision detected for entity " << entity->index << std::endl;
+                // if (intity->type != "tyle") {
+                //     entity->velocity * -1;
+                // }
             }
         }
     }

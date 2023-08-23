@@ -27,17 +27,17 @@ int main() {
     game.init("game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height);
 
     // add enemies
-    std::shared_ptr<Enemy> enemy{new Enemy{100, 100, "assets/packman_set.png"}};
+    std::unique_ptr<Enemy> enemy{new Enemy{100, 100, "assets/packman_set.png"}};
     game.add_entity(std::move(enemy));
 
     // add tiles
     for (int i = 0; i < 10; ++i) {
-        std::shared_ptr<Tile> tile1{new Tile{i * 64 + 50, 400, 64, 64, "assets/solid.png"}};
+        std::unique_ptr<Tile> tile1{new Tile{i * 64 + 50, 400, 64, 64, "assets/solid.png"}};
         game.add_entity(std::move(tile1));
     }
-    std::shared_ptr<Tile> tile2{new Tile{164, 400-66, 64, 64, "assets/solid.png"}};
+    std::unique_ptr<Tile> tile2{new Tile{164, 400-64, 64, 64, "assets/solid.png"}};
     game.add_entity(std::move(tile2));
-    std::shared_ptr<Tile> tile3{new Tile{228, 400-66, 64, 64, "assets/solid.png"}};
+    std::unique_ptr<Tile> tile3{new Tile{228, 400-64, 64, 64, "assets/solid.png"}};
     game.add_entity(std::move(tile3));
     
     // set frame rate variables

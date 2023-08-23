@@ -23,7 +23,7 @@ public:
     void clean();
     void handle_events();
 
-    void add_entity(std::shared_ptr<Entity> &&entity) noexcept { 
+    void add_entity(std::unique_ptr<Entity> &&entity) noexcept { 
         std::cout << "Entity " << entity->index << " added" << std::endl;
         m_content.emplace_back(std::move(entity)); 
     }
@@ -52,7 +52,7 @@ private:
     int m_w = 0;
     int m_h = 0;
 
-    std::vector<std::shared_ptr<Entity>> m_content{};
+    std::vector<std::unique_ptr<Entity>> m_content{};
     // std::vector<std::unique_ptr<Entity>> m_tiles{};
     std::unique_ptr<Player> m_player{nullptr};
     ObjectStatementManager statement_manager{};
