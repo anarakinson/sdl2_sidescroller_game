@@ -42,19 +42,18 @@ public:
         if (m_move_down && m_move_right) { m_move_left = false; }              // resolve inconsistent input
         if (m_move_up && m_move_down) { m_move_down = false; }
 
-        if (m_move_left) {                                                     // process input
-            if (m_right_direction) { m_right_direction = !m_right_direction; }
-            if (std::abs(velocity.x) < m_max_speed) { --velocity.x; }
-        } else {}
-        if (m_move_right) { 
-            if (!m_right_direction) { m_right_direction = !m_right_direction; }
-            if (std::abs(velocity.x) < m_max_speed) { ++velocity.x; }
+        if (                                                                   // update direction
+            (!m_right_direction && m_move_right) || 
+            (m_right_direction && m_move_left)
+        ) { m_right_direction = !m_right_direction; }
+
+        if (std::abs(velocity.x) < m_max_speed) {
+            if (m_move_left) { --velocity.x; }
+            if (m_move_right) { ++velocity.x; }
         }
-        if (m_move_up) { 
-            if (std::abs(velocity.y) < m_max_speed) { --velocity.y; }
-        }
-        if (m_move_down) {
-            if (std::abs(velocity.y) < m_max_speed) { ++velocity.y; } 
+        if (std::abs(velocity.y) < m_max_speed) {
+            if (m_move_up) { --velocity.y; }
+            if (m_move_down) { ++velocity.y; } 
         }
 
         m_position += velocity;                                      // update position
