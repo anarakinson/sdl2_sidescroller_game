@@ -1,7 +1,5 @@
 #include <collision.h>
-#include <game.h>
 
-#include <SDL2/SDL.h>
 
 
 bool Collision::is_collide(const SDL_Rect &A, const SDL_Rect &B) {

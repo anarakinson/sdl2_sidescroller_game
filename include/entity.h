@@ -41,22 +41,22 @@ public:
     bool operator == (int value) { return x == value && y == value; }
 };
 
-Vector2D operator + (Vector2D lhs, const Vector2D &rhs) { 
+inline Vector2D operator + (Vector2D lhs, const Vector2D &rhs) { 
     lhs.x += rhs.x;
     lhs.y += rhs.y;
     return lhs; 
 }
-Vector2D operator - (Vector2D lhs, const Vector2D &rhs) { 
+inline Vector2D operator - (Vector2D lhs, const Vector2D &rhs) { 
     lhs.x -= rhs.x;
     lhs.y -= rhs.y;
     return lhs; 
 }
-Vector2D operator * (Vector2D lhs, const Vector2D &rhs) { 
+inline Vector2D operator * (Vector2D lhs, const Vector2D &rhs) { 
     lhs.x *= rhs.x;
     lhs.y *= rhs.y;
     return lhs; 
 }
-Vector2D operator / (Vector2D lhs, const Vector2D &rhs) { 
+inline Vector2D operator / (Vector2D lhs, const Vector2D &rhs) { 
     lhs.x /= rhs.x;
     lhs.y /= rhs.y;
     return lhs; 
