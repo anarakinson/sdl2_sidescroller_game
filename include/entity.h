@@ -19,20 +19,18 @@ public:
 
     virtual std::string type() { return "basic entity"; }
 
-    bool is_collide() { return m_is_collide; }
-    void collide() { m_is_collide = true; }
-    void collide(const SDL_Rect &collider) {
+    void collide(const Position2D &collider) {
 
-        m_down_collision = Collision::down_collision(m_dst_rect, collider);
-        m_up_collision = Collision::up_collision(m_dst_rect, collider);
-        m_left_collision = Collision::left_collision(m_dst_rect, collider);
-        m_right_collision = Collision::right_collision(m_dst_rect, collider);
+        m_down_collision = Collision::down_collision(m_position, collider);
+        m_up_collision = Collision::up_collision(m_position, collider);
+        m_left_collision = Collision::left_collision(m_position, collider);
+        m_right_collision = Collision::right_collision(m_position, collider);
 
-        m_is_collide = Collision::inside(m_dst_rect, collider);
+        m_is_collide = Collision::inside(m_position, collider);
     }
 
 
-    virtual SDL_Rect collider() { return m_dst_rect; }
+    virtual Position2D collider() { return m_position; }
 
     static int counter;
     int index;

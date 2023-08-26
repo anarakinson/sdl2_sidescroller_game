@@ -76,12 +76,18 @@ inline Vector2D operator / (Vector2D lhs, const Vector2D &rhs) {
 }
 
 
+
 class Position2D {
 public:
     int x = 0;
     int y = 0;
     int w = 0;
     int h = 0;
+
+    int left_side() const { return x; }
+    int right_side() const { return x + w; }
+    int up_side() const { return y; }
+    int down_side() const { return y + h; }
 
     Position2D operator += (Vector2D vector) {
         x += vector.x;

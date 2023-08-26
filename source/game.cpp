@@ -71,7 +71,7 @@ void Game::update() {
                 Collision::is_collide(entity->collider(), other_entity->collider())
             ) {
                 // std::cout << "Collision detected for entity " << entity->index << std::endl;
-                entity->collide();
+                entity->collide(other_entity->collider());
             }
         }
     }

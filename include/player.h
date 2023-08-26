@@ -49,10 +49,9 @@ public:
         else if (m_move_down) { m_input.y = 1; } 
 
         // // process velocity
-        if (m_is_collide && m_down_collision) {                               // move backward collision and stop process input 
+        if (m_is_collide) {                               // move backward collision and stop process input 
             velocity.y -= m_position.h / 2; 
             m_is_collide = false;
-            m_input.y = m_input.y > 0 ? 0 : m_input.y;
         }
 
         // apply gravity
@@ -62,6 +61,7 @@ public:
         }
         if (m_down_collision) {
             std::cout << "On floor" << std::endl;
+            m_input.y = m_input.y > 0 ? 0 : m_input.y;
             m_gravity = 0;
             m_down_collision = false;
         }

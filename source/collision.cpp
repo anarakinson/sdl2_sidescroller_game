@@ -1,46 +1,51 @@
 #include <collision.h>
+#include <vector2d.h>
+#include <iostream>
 
+#define buff -10
 
-int Collision::buffer = 10;
+// int Collision::buffer = +5;
 
-bool Collision::is_collide(const SDL_Rect &A, const SDL_Rect &B) {
+bool Collision::is_collide(const Position2D &A, const Position2D &B) {
+
     if (
-        A.x + A.w >= B.x - Collision::buffer &&
-              A.x <= B.x + B.w + Collision::buffer &&
-        A.y + A.h >= B.y - Collision::buffer &&
-              A.y <= B.y + B.h + Collision::buffer 
+        A.left_side() <= B.right_side() &&
+        A.right_side() >= B.left_side() &&
+        A.up_side() <= B.down_side() &&
+        A.down_side() >= B.up_side() 
     ) {
         return true;
     }
     return false;
 }
 
-bool Collision::inside(const SDL_Rect &A, const SDL_Rect &B) {
+bool Collision::inside(const Position2D &A, const Position2D &B) {
+
     if (
-        A.x + A.w > B.x &&
-              A.x < B.x + B.w &&
-        A.y + A.h > B.y &&
-              A.y < B.y + B.h 
+        A.left_side() < B.right_side() + 15 &&
+        A.right_side() > B.left_side() - 15 &&
+        A.up_side() < B.down_side() + 15 &&
+        A.down_side() > B.up_side() - 15 
     ) {
         return true;
     }
     return false;
 }
 
-bool Collision::down_collision(const SDL_Rect &A, const SDL_Rect &B) {
+bool Collision::down_collision(const Position2D &A, const Position2D &B) {
     if (
-        A.y >= B.y - B.h &&
-        A.y <= B.y + B.h &&
+        A.down_side() >= B.up_side() &&
+        A.down_side() <= B.up_side() + 15 &&
         
-        A.x + A.w > B.x &&
-              A.x < B.x + B.w
+        A.right_side() >= B.left_side() &&
+        A.left_side() <= B.right_side() 
     ) {
         return true;
     }
     return false;
 }
 
-bool Collision::up_collision(const SDL_Rect &A, const SDL_Rect &B) {
+bool Collision::up_collision(const Position2D &A, const Position2D &B) {
     if (
         A.y <= B.y + B.h &&
         
@@ -52,7 +57,7 @@ bool Collision::up_collision(const SDL_Rect &A, const SDL_Rect &B) {
     return false;
 }
 
-bool Collision::left_collision(const SDL_Rect &A, const SDL_Rect &B) {
+bool Collision::left_collision(const Position2D &A, const Position2D &B) {
     if (
         A.y + A.h <= B.y - 15 &&
         A.y > B.y - 2 &&
@@ -64,7 +69,7 @@ bool Collision::left_collision(const SDL_Rect &A, const SDL_Rect &B) {
     return false;
 }
 
-bool Collision::right_collision(const SDL_Rect &A, const SDL_Rect &B) {
+bool Collision::right_collision(const Position2D &A, const Position2D &B) {
     if (
         A.y + A.h <= B.y - 15 &&
         A.y > B.y - 2 &&
