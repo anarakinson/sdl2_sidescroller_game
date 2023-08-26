@@ -31,6 +31,10 @@ int main() {
     game.add_entity(std::move(enemy));
 
     // add tiles
+    for (int i = 0; i < 5; ++i) {
+        std::unique_ptr<Tile> tile{new Tile{i * 64 + 150, 100, 64, 64, "assets/solid.png"}};
+        game.add_entity(std::move(tile));
+    }
     for (int i = 0; i < 10; ++i) {
         std::unique_ptr<Tile> tile1{new Tile{i * 64 + 50, 400, 64, 64, "assets/solid.png"}};
         game.add_entity(std::move(tile1));

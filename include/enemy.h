@@ -1,6 +1,5 @@
 #pragma once 
 
-#include <game.h>
 #include <entity.h>
 #include <texture_manager.h>
 

@@ -1,96 +1,11 @@
 #pragma once 
 
+#include <vector2d.h>
+#include <collision.h>
 #include <iostream>
 #include <string>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-
-
-
-class Vector2D {
-public:
-    int x = 0;
-    int y = 0;
-
-    Vector2D operator *= (int modifier) { 
-        x *= modifier;
-        y *= modifier;
-        
-        return *this; 
-    }
-    Vector2D operator /= (int modifier) { 
-        x /= modifier;
-        y /= modifier;
-        
-        return *this; 
-    }
-    Vector2D operator += (int modifier) { 
-        x += modifier;
-        y += modifier;
-        
-        return *this; 
-    }
-    Vector2D operator -= (int modifier) { 
-        x -= modifier;
-        y -= modifier;
-        
-        return *this; 
-    }
-
-    void operator = (int value) { x = value; y = value; }
-    bool operator == (int value) { return x == value && y == value; }
-};
-
-inline Vector2D operator + (Vector2D lhs, const Vector2D &rhs) { 
-    lhs.x += rhs.x;
-    lhs.y += rhs.y;
-    return lhs; 
-}
-inline Vector2D operator - (Vector2D lhs, const Vector2D &rhs) { 
-    lhs.x -= rhs.x;
-    lhs.y -= rhs.y;
-    return lhs; 
-}
-inline Vector2D operator * (Vector2D lhs, const Vector2D &rhs) { 
-    lhs.x *= rhs.x;
-    lhs.y *= rhs.y;
-    return lhs; 
-}
-inline Vector2D operator / (Vector2D lhs, const Vector2D &rhs) { 
-    lhs.x /= rhs.x;
-    lhs.y /= rhs.y;
-    return lhs; 
-}
-
-class Position2D {
-public:
-    int x = 0;
-    int y = 0;
-    int w = 0;
-    int h = 0;
-
-    Position2D operator += (Vector2D vector) {
-        x += vector.x;
-        y += vector.y;
-        return *this;
-    }    
-    Position2D operator -= (Vector2D vector) {
-        x -= vector.x;
-        y -= vector.y;
-        return *this;
-    }    
-    Position2D operator *= (Vector2D vector) {
-        x *= vector.x;
-        y *= vector.y;
-        return *this;
-    }    
-    Position2D operator /= (Vector2D vector) {
-        x /= vector.x;
-        y /= vector.y;
-        return *this;
-    }    
-
-};
 
 
 class Entity {
@@ -106,6 +21,15 @@ public:
 
     bool is_collide() { return m_is_collide; }
     void collide() { m_is_collide = true; }
+    void collide(const SDL_Rect &collider) {
+
+        m_down_collision = Collision::down_collision(m_dst_rect, collider);
+        m_up_collision = Collision::up_collision(m_dst_rect, collider);
+        m_left_collision = Collision::left_collision(m_dst_rect, collider);
+        m_right_collision = Collision::right_collision(m_dst_rect, collider);
+
+        m_is_collide = Collision::inside(m_dst_rect, collider);
+    }
 
 
     virtual SDL_Rect collider() { return m_dst_rect; }
@@ -129,5 +53,10 @@ protected:
     SDL_Point m_center{NULL};
 
     bool m_is_collide = false;
+
+    bool m_down_collision = false;
+    bool m_up_collision = false;
+    bool m_left_collision = false;
+    bool m_right_collision = false;
 
 };

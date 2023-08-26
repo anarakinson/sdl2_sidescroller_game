@@ -1,12 +1,12 @@
 #pragma once 
 
-#include <game.h>
 #include <entity.h>
 #include <collision.h>
 #include <texture_manager.h>
 
 #include <iostream>
 #include <string>
+#include <algorithm>
 #include <math.h>
 
 
@@ -33,12 +33,6 @@ public:
     void init() override {}
     void update() override {
 
-        if (is_collide()) {                               // move backward collision and stop process input 
-            velocity *= -1; 
-            m_is_collide = false;
-            m_move_left = m_move_right = m_move_down = m_move_up = false;
-        }
-
         if (m_move_down && m_move_right) { m_move_left = false; }              // resolve inconsistent input
         if (m_move_up && m_move_down) { m_move_down = false; }
 
@@ -46,16 +40,41 @@ public:
             (!m_right_direction && m_move_right) || 
             (m_right_direction && m_move_left)
         ) { m_right_direction = !m_right_direction; }
+        
+        // process input
+        m_input = 0;
+        if (m_move_left) { m_input.x = -1; }
+        else if (m_move_right) { m_input.x = 1; }
+        if (m_move_up) { m_input.y = -5; }
+        else if (m_move_down) { m_input.y = 1; } 
 
-        if (std::abs(velocity.x) < m_max_speed) {
-            if (m_move_left) { --velocity.x; }
-            if (m_move_right) { ++velocity.x; }
-        }
-        if (std::abs(velocity.y) < m_max_speed) {
-            if (m_move_up) { --velocity.y; }
-            if (m_move_down) { ++velocity.y; } 
+        // // process velocity
+        if (m_is_collide && m_down_collision) {                               // move backward collision and stop process input 
+            velocity.y -= m_position.h / 2; 
+            m_is_collide = false;
+            m_input.y = m_input.y > 0 ? 0 : m_input.y;
         }
 
+        // apply gravity
+        if (!m_down_collision) { 
+            m_gravity += 1;
+            m_gravity = std::min(m_gravity, m_max_speed / 3);
+        }
+        if (m_down_collision) {
+            std::cout << "On floor" << std::endl;
+            m_gravity = 0;
+            m_down_collision = false;
+        }
+        
+        velocity += m_input;
+        velocity.y += m_gravity;
+        
+        velocity.x = std::max(-m_max_speed, std::min(velocity.x, m_max_speed));
+        velocity.y = std::max(-m_max_speed, std::min(velocity.y, m_max_speed));
+
+        std::cout << m_gravity << " " << velocity.x << " " << velocity.y << std::endl;
+        
+        // set position
         m_position += velocity;                                      // update position
 
 
@@ -103,5 +122,8 @@ private:
 
     int m_max_speed = 10;
     int m_speed = 0;
+
+    Vector2D m_input{};
+    int m_gravity = 0;
     
 };
