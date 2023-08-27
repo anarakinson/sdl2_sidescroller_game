@@ -14,8 +14,11 @@
 // set window size
 constexpr static int width = 800;
 constexpr static int height = 600;
+// set updates per second
+constexpr static int UPS = 300;  
+constexpr static int update_delay = 1000 / UPS;
 // set frame rate
-constexpr static int FPS = 60;
+constexpr static int FPS = 60;   
 constexpr static int frame_delay = 1000 / FPS;
 
 
@@ -45,12 +48,13 @@ int main() {
     game.add_entity(std::move(tile3));
     
     // set frame rate variables
-    uint32_t frame_start;
-    int frame_duration;
+    uint32_t update_start;
+    uint32_t frame_counter = SDL_GetTicks();
+    int update_duration;
 
     while (game.is_running()) {
         // get frame start time
-        frame_start = SDL_GetTicks();
+        update_start = SDL_GetTicks();
 
         // handle user input
         game.handle_events();
@@ -59,13 +63,16 @@ int main() {
         game.update();
 
         // display changes
-        game.render();
+        if (SDL_GetTicks() - frame_counter >= frame_delay) {
+            game.render();
+            frame_counter = SDL_GetTicks();
+        }
 
         // get frame duration
-        frame_duration = SDL_GetTicks() - frame_start;
+        update_duration = SDL_GetTicks() - update_start;
         // if frame duration too short - force frame delay
-        if (frame_duration < frame_delay) {
-            SDL_Delay(frame_delay - frame_duration);
+        if (update_duration < update_delay) {
+            SDL_Delay(update_delay - update_duration);
         }
     }
 

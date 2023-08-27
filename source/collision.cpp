@@ -21,10 +21,10 @@ bool Collision::up_collision(const Position2D &A, const Position2D &B) {
     Position2D::Center B_center = B.center();
 
     if (
-        A.down_side() > B.up_side() && 
+        A.down_side() >= B.up_side() && 
         A_center.y > B_center.y &&
-        A_center.x >= B.left_side() &&
-        A_center.x <= B.right_side()
+        A.right_side() > B.left_side() + 3 &&
+        A.left_side() < B.right_side() - 3
     ) {
         return true;
     }
@@ -36,10 +36,10 @@ bool Collision::down_collision(const Position2D &A, const Position2D &B) {
     Position2D::Center B_center = B.center();
 
     if (
-        A.up_side() < B.down_side() && 
+        A.up_side() <= B.down_side() && 
         A_center.y < B_center.y &&
-        A_center.x >= B.left_side() &&
-        A_center.x <= B.right_side()
+        A.right_side() > B.left_side() + 3 &&
+        A.left_side() < B.right_side() - 3
     ) {
         return true;
     }
@@ -51,10 +51,10 @@ bool Collision::right_collision(const Position2D &A, const Position2D &B) {
     Position2D::Center B_center = B.center();
 
     if (
-        A.right_side() > B.left_side() && 
+        A.right_side() >= B.left_side() && 
         A_center.x < B_center.x &&
-        A_center.y >= B.up_side() &&
-        A_center.y <= B.down_side()
+        A.down_side() > B.up_side() + 3 &&
+        A.up_side() < B.down_side() - 3
     ) {
         return true;
     }
@@ -66,10 +66,10 @@ bool Collision::left_collision(const Position2D &A, const Position2D &B) {
     Position2D::Center B_center = B.center();
     
     if (
-        A.left_side() < B.right_side() && 
+        A.left_side() <= B.right_side() && 
         A_center.x > B_center.x &&
-        A_center.y >= B.up_side() &&
-        A_center.y <= B.down_side()
+        A.down_side() > B.up_side() + 3 &&
+        A.up_side() < B.down_side() - 3
     ) {
         return true;
     }

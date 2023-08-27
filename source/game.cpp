@@ -64,6 +64,7 @@ void Game::update() {
                 )
             ) {
                 m_player->collide(entity->collider());
+                entity->collide(m_player->collider());
             }
             if (
                 entity->index != other_entity->index &&                     // not compare entity with itself

@@ -52,7 +52,7 @@ public:
         if (m_down_collision) { m_gravity = 0; } 
         else { 
             m_gravity += 1;
-            m_gravity = std::min(m_gravity, m_max_speed / 3);
+            m_gravity = std::min(m_gravity, m_max_speed);
         }
         
         velocity += m_input;
@@ -114,7 +114,7 @@ private:
     bool m_move_up = false;
     bool m_move_down = false;
 
-    int m_max_speed = 10;
+    int m_max_speed = 2;
     int m_speed = 0;
 
     Vector2D m_input{};
