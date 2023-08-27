@@ -8,8 +8,6 @@
 
 class Collision {
 public:
-    static int buffer;
-
     static bool is_collide(const Position2D &A, const Position2D &B);
     static bool inside(const Position2D &A, const Position2D &B);
     static bool up_collision(const Position2D &A, const Position2D &B);

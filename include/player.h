@@ -48,31 +48,23 @@ public:
         if (m_move_up) { m_input.y = -5; }
         else if (m_move_down) { m_input.y = 1; } 
 
-        // // process velocity
-        // if (m_is_collide) {                               // move backward collision and stop process input 
-        //     velocity.y -= m_position.h / 2; 
-        //     m_is_collide = false;
-        // }
-
-        // // apply gravity
-        // if (!m_down_collision) { 
-        //     m_gravity += 1;
-        //     m_gravity = std::min(m_gravity, m_max_speed / 3);
-        // }
-        // if (m_down_collision) {
-        //     std::cout << "On floor" << std::endl;
-        //     m_input.y = m_input.y > 0 ? 0 : m_input.y;
-        //     m_gravity = 0;
-        //     m_down_collision = false;
-        // }
+        // apply gravity
+        if (m_down_collision) { m_gravity = 0; } 
+        else { 
+            m_gravity += 1;
+            m_gravity = std::min(m_gravity, m_max_speed / 3);
+        }
         
         velocity += m_input;
         velocity.y += m_gravity;
+
+        if (m_up_collision) { velocity.y = velocity.y < 0 ? 0 : velocity.y; }
+        if (m_down_collision) { velocity.y = velocity.y > 0 ? 0 : velocity.y; }
+        if (m_left_collision) { velocity.x = velocity.x < 0 ? 0 : velocity.x; }
+        if (m_right_collision) { velocity.x = velocity.x > 0 ? 0 : velocity.x; }
         
         velocity.x = std::max(-m_max_speed, std::min(velocity.x, m_max_speed));
         velocity.y = std::max(-m_max_speed, std::min(velocity.y, m_max_speed));
-
-        std::cout << m_gravity << " " << velocity.x << " " << velocity.y << std::endl;
         
         // set position
         m_position += velocity;                                      // update position

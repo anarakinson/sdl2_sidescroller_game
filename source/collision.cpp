@@ -2,9 +2,6 @@
 #include <vector2d.h>
 #include <iostream>
 
-#define buff -10
-
-// int Collision::buffer = +5;
 
 bool Collision::is_collide(const Position2D &A, const Position2D &B) {
 
@@ -19,7 +16,7 @@ bool Collision::is_collide(const Position2D &A, const Position2D &B) {
     return false;
 }
 
-bool Collision::down_collision(const Position2D &A, const Position2D &B) {
+bool Collision::up_collision(const Position2D &A, const Position2D &B) {
     Position2D::Center A_center = A.center();
     Position2D::Center B_center = B.center();
 
@@ -34,7 +31,7 @@ bool Collision::down_collision(const Position2D &A, const Position2D &B) {
     return false;
 }
 
-bool Collision::up_collision(const Position2D &A, const Position2D &B) {
+bool Collision::down_collision(const Position2D &A, const Position2D &B) {
     Position2D::Center A_center = A.center();
     Position2D::Center B_center = B.center();
 
@@ -67,7 +64,7 @@ bool Collision::right_collision(const Position2D &A, const Position2D &B) {
 bool Collision::left_collision(const Position2D &A, const Position2D &B) {
     Position2D::Center A_center = A.center();
     Position2D::Center B_center = B.center();
-
+    
     if (
         A.left_side() < B.right_side() && 
         A_center.x > B_center.x &&

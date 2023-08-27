@@ -31,8 +31,8 @@ public:
     void update() override { 
         if (m_position.x + m_dst_rect.w >= 800 || m_right_collision) { move_right = false; }
         else if (m_position.x <= 0 || m_left_collision) { move_right = true; }
-        if (m_position.y + m_dst_rect.h >= 600 || m_up_collision) { move_down = false; }
-        else if (m_position.y <= 0 || m_down_collision) { move_down = true; }
+        if (m_position.y + m_dst_rect.h >= 600 || m_down_collision) { move_down = false; }
+        else if (m_position.y <= 0 || m_up_collision) { move_down = true; }
 
         if (move_right) { ++m_position.x; }
         else { --m_position.x; }
