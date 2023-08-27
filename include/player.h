@@ -12,11 +12,11 @@
 
 class Player : public Entity {
 public:
-    Player(int x, int y, const char *texturesheet) {
+    Player(int x, int y, int w, int h, const char *texturesheet) {
         m_position.x = x;
         m_position.y = y;
-        m_position.w = 64;
-        m_position.h = 64;
+        m_position.w = w;
+        m_position.h = h;
         
         m_texture = TextureManager::LoadTexture(texturesheet);
         std::cout << "Player character created" << std::endl;
@@ -92,6 +92,8 @@ public:
         m_dst_rect.y = m_position.y;
         m_dst_rect.w = m_position.w;       // game object size in game
         m_dst_rect.h = m_position.h;
+
+        reset_collisions();    
         
     }
     void render() override { 

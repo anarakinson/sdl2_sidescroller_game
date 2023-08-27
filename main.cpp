@@ -27,12 +27,12 @@ int main() {
     game.init("game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height);
 
     // add enemies
-    std::unique_ptr<Enemy> enemy{new Enemy{100, 100, "assets/packman_set.png"}};
+    std::unique_ptr<Enemy> enemy{new Enemy{100, 100, 64, 64, "assets/packman_set.png"}};
     game.add_entity(std::move(enemy));
 
     // add tiles
     for (int i = 0; i < 5; ++i) {
-        std::unique_ptr<Tile> tile{new Tile{i * 64 + 150, 100, 64, 64, "assets/solid.png"}};
+        std::unique_ptr<Tile> tile{new Tile{i * 90 + 150, 100, 90, 90, "assets/solid.png"}};
         game.add_entity(std::move(tile));
     }
     for (int i = 0; i < 10; ++i) {

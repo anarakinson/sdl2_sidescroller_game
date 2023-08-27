@@ -38,7 +38,7 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
             std::cout << "Window rendered" << std::endl;
         }
 
-        m_player = std::unique_ptr<Player>(new Player{0, 0, "assets/packman_set.png"});
+        m_player = std::unique_ptr<Player>(new Player{0, 0, 64, 64, "assets/packman_set.png"});
 
         m_running = true;                                         // set game running
 
