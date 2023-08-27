@@ -27,10 +27,30 @@ public:
         Position2D::Center A_center = m_position.center();
         Position2D::Center B_center = collider.center();
 
-        if (m_position.up_side() < collider.down_side() && A_center.y < B_center.y) { m_position.y = collider.y - collider.h; }
-        if (m_position.down_side() > collider.up_side() && A_center.y > B_center.y) { m_position.y = collider.y + collider.h; }
-        if (m_position.right_side() > collider.left_side() && A_center.x < B_center.x) { m_position.x = collider.x - collider.h; }
-        if (m_position.left_side() < collider.right_side() && A_center.x > B_center.x) { m_position.x = collider.x + collider.h; }
+        if (
+            m_position.up_side() < collider.down_side() && 
+            A_center.y < B_center.y &&
+            A_center.x >= collider.left_side() &&
+            A_center.x <= collider.right_side()
+        ) { m_position.y = collider.y - collider.h; }
+        if (
+            m_position.down_side() > collider.up_side() && 
+            A_center.y > B_center.y &&
+            A_center.x >= collider.left_side() &&
+            A_center.x <= collider.right_side()
+        ) { m_position.y = collider.y + collider.h; }
+        if (
+            m_position.right_side() > collider.left_side() && 
+            A_center.x < B_center.x &&
+            A_center.y >= collider.up_side() &&
+            A_center.y <= collider.down_side()
+        ) { m_position.x = collider.x - collider.w; }
+        if (
+            m_position.left_side() < collider.right_side() && 
+            A_center.x > B_center.x &&
+            A_center.y >= collider.up_side() &&
+            A_center.y <= collider.down_side()
+        ) { m_position.x = collider.x + collider.w; }
     }
 
 

@@ -85,13 +85,17 @@ public:
     int h = 0;
 
     struct Center {
-        Center(int x, int y) : x{x}, y{y} {}
+        Center(int left, int top, int right, int bottom) {
+            x = left + right / 2;
+            y = top + bottom / 2;
+            
+        }
 
         int x;
         int y;
     };
 
-    Center center() const { return Center{x, y}; }
+    Center center() const { return Center{x, y, w, h}; }
 
     int left_side() const { return x; }
     int right_side() const { return x + w; }
