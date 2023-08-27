@@ -49,22 +49,22 @@ public:
         else if (m_move_down) { m_input.y = 1; } 
 
         // // process velocity
-        if (m_is_collide) {                               // move backward collision and stop process input 
-            velocity.y -= m_position.h / 2; 
-            m_is_collide = false;
-        }
+        // if (m_is_collide) {                               // move backward collision and stop process input 
+        //     velocity.y -= m_position.h / 2; 
+        //     m_is_collide = false;
+        // }
 
-        // apply gravity
-        if (!m_down_collision) { 
-            m_gravity += 1;
-            m_gravity = std::min(m_gravity, m_max_speed / 3);
-        }
-        if (m_down_collision) {
-            std::cout << "On floor" << std::endl;
-            m_input.y = m_input.y > 0 ? 0 : m_input.y;
-            m_gravity = 0;
-            m_down_collision = false;
-        }
+        // // apply gravity
+        // if (!m_down_collision) { 
+        //     m_gravity += 1;
+        //     m_gravity = std::min(m_gravity, m_max_speed / 3);
+        // }
+        // if (m_down_collision) {
+        //     std::cout << "On floor" << std::endl;
+        //     m_input.y = m_input.y > 0 ? 0 : m_input.y;
+        //     m_gravity = 0;
+        //     m_down_collision = false;
+        // }
         
         velocity += m_input;
         velocity.y += m_gravity;

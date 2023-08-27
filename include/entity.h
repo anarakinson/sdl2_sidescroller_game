@@ -19,14 +19,18 @@ public:
 
     virtual std::string type() { return "basic entity"; }
 
+    void set_position(int x, int y) { m_position.x = x; m_position.y = y;}
+
     void collide(const Position2D &collider) {
+        m_is_collide = Collision::is_collide(m_position, collider);
 
-        m_down_collision = Collision::down_collision(m_position, collider);
-        m_up_collision = Collision::up_collision(m_position, collider);
-        m_left_collision = Collision::left_collision(m_position, collider);
-        m_right_collision = Collision::right_collision(m_position, collider);
+        Position2D::Center A_center = m_position.center();
+        Position2D::Center B_center = collider.center();
 
-        m_is_collide = Collision::inside(m_position, collider);
+        if (m_position.up_side() < collider.down_side() && A_center.y < B_center.y) { m_position.y = collider.y - collider.h; }
+        if (m_position.down_side() > collider.up_side() && A_center.y > B_center.y) { m_position.y = collider.y + collider.h; }
+        if (m_position.right_side() > collider.left_side() && A_center.x < B_center.x) { m_position.x = collider.x - collider.h; }
+        if (m_position.left_side() < collider.right_side() && A_center.x > B_center.x) { m_position.x = collider.x + collider.h; }
     }
 
 

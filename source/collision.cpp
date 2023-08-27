@@ -19,19 +19,6 @@ bool Collision::is_collide(const Position2D &A, const Position2D &B) {
     return false;
 }
 
-bool Collision::inside(const Position2D &A, const Position2D &B) {
-
-    if (
-        A.left_side() < B.right_side() + 15 &&
-        A.right_side() > B.left_side() - 15 &&
-        A.up_side() < B.down_side() + 15 &&
-        A.down_side() > B.up_side() - 15 
-    ) {
-        return true;
-    }
-    return false;
-}
-
 bool Collision::down_collision(const Position2D &A, const Position2D &B) {
     if (
         A.down_side() >= B.up_side() &&

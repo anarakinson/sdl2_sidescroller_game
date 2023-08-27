@@ -84,6 +84,15 @@ public:
     int w = 0;
     int h = 0;
 
+    struct Center {
+        Center(int x, int y) : x{x}, y{y} {}
+
+        int x;
+        int y;
+    };
+
+    Center center() const { return Center{x, y}; }
+
     int left_side() const { return x; }
     int right_side() const { return x + w; }
     int up_side() const { return y; }
