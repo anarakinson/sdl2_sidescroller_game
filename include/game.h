@@ -53,5 +53,7 @@ private:
     std::unique_ptr<Player> m_player{nullptr};
     ObjectStatementManager statement_manager{};
 
+    inline void update_with_modifier(const std::unique_ptr<Entity> &entity, int x_modifier);
+    inline bool check_entity_position(const std::unique_ptr<Entity> &entity);
+    inline void update_position_modifier(int &modifier);
 };
-

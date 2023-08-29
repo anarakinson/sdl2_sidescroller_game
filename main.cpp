@@ -30,16 +30,17 @@ int main() {
     game.init("game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height);
 
     /*--------------------------------------------------------------------------*/
+    SDL_Texture *tile_texture = TextureManager::LoadTexture("assets/solid.png");
+    SDL_Texture *enemy_texture = TextureManager::LoadTexture("assets/packman_set.png");
+
     // add enemies
-    std::unique_ptr<Enemy> enemy{new Enemy{100, 100, 64, 64, "assets/packman_set.png"}};
+    std::unique_ptr<Enemy> enemy{new Enemy{100, 100, 64, 64, enemy_texture}};
     game.add_entity(std::move(enemy));
 
-    // for (int i = 0; i < 100; ++i) {
-    //     std::unique_ptr<Enemy> enemy{new Enemy{100+i, 100+i, 4, 4, }};
-    //     game.add_entity(std::move(enemy));
-    // }
-
-    SDL_Texture *tile_texture = TextureManager::LoadTexture("assets/solid.png");
+    for (int i = 0; i < 10; ++i) {
+        std::unique_ptr<Enemy> enemy1{new Enemy{100 + i, 100 + i, 32, 32, enemy_texture}};
+        game.add_entity(std::move(enemy1));
+    }
 
     // add tiles
     for (int i = 0; i < 5; ++i) {

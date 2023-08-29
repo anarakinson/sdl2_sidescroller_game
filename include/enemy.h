@@ -9,13 +9,13 @@
 
 class Enemy : virtual public Entity {
 public:
-    Enemy(int x, int y, int w, int h, const char *texturesheet) {
+    Enemy(int x, int y, int w, int h, SDL_Texture *texture) {
         m_position.x = x;
         m_position.y = y;
         m_position.w = w;
         m_position.h = h;
 
-        m_texture = TextureManager::LoadTexture(texturesheet);
+        m_texture = texture;
         
         m_src_rect.x = 180;        // source image coordinates on tileset 
         m_src_rect.y = 90; 
