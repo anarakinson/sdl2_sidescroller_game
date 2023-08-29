@@ -11,13 +11,21 @@
 class Entity {
 public:
     explicit Entity() { index = counter++; };
-    virtual ~Entity() {}
+    virtual ~Entity() noexcept {}
 
     virtual void init() {}
     virtual void update() {}
     virtual void render() {}
 
     virtual std::string type() { return "basic entity"; }
+    virtual void hflip() {
+        if (m_flip == SDL_FLIP_NONE) { m_flip = SDL_FLIP_HORIZONTAL; }
+        else if (m_flip == SDL_FLIP_HORIZONTAL) { m_flip = SDL_FLIP_NONE; }
+    }
+    virtual void vflip() {
+        if (m_flip == SDL_FLIP_NONE) { m_flip = SDL_FLIP_HORIZONTAL; }
+        else if (m_flip == SDL_FLIP_HORIZONTAL) { m_flip = SDL_FLIP_NONE; }
+    }
 
     void set_position(int x, int y) { m_position.x = x; m_position.y = y;}
 

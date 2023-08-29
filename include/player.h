@@ -50,10 +50,7 @@ public:
 
         // apply gravity
         if (m_down_collision) { m_gravity = 0; } 
-        else { 
-            m_gravity += 1;
-            m_gravity = std::min(m_gravity, m_max_speed);
-        }
+        else { m_gravity = std::min(++m_gravity, m_max_speed + 2); }
         
         velocity += m_input;
         velocity.y += m_gravity;
@@ -101,6 +98,7 @@ public:
     void move_up(bool state) { m_move_up = state; }
     void move_down(bool state) { m_move_down = state; }
 
+    int max_speed() { return m_max_speed; }
     // Vector2D velocity() { return m_velocity; }                                 // get velocity
     // void velocity(int x, int y) { m_velocity.x = x; m_velocity.y = y; }        // set velocity
 

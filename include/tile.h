@@ -19,7 +19,7 @@ public:
         SDL_DestroyTexture(m_texture);
     }
     
-    Tile(int x, int y, int w, int h, const char *path) {
+    Tile(int x, int y, int w, int h, SDL_Texture *texture) {
         m_position.x = x;
         m_position.y = y;
         m_position.w = w;
@@ -27,7 +27,7 @@ public:
 
         m_dst_rect.x = m_position.x;
         m_dst_rect.y = m_position.y;
-        m_texture = TextureManager::LoadTexture(path);
+        m_texture = texture;
 
         m_src_rect.x = 0;        // source image coordinates on tileset 
         m_src_rect.y = 0; 

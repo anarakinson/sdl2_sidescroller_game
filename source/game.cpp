@@ -53,29 +53,53 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
 
 void Game::update() {
     // update state
-    m_player->update();
+    m_player->update(); 
+    // modifier for move environment 
+    int x_modifier = 0;
+    if (m_player->m_position.x > (m_w / 4) * 3) {
+        x_modifier -= m_player->max_speed() + 2;
+    } else if (m_player->m_position.x < m_w / 4) {
+        x_modifier += m_player->max_speed() + 2;
+    }
+    m_player->m_position.x += x_modifier;
     
+    // collisions for entities
     for (auto &entity : m_content) {
-        entity->update();  
-        for (auto &other_entity : m_content) {
-            if (
+
+        entity->update();
+        entity->m_position.x += x_modifier;  
+        if (
                 m_player->index != entity->index && (
-                    Collision::is_collide(m_player->collider(), entity->collider()) 
-                )
-            ) {
-                m_player->collide(entity->collider());
-                entity->collide(m_player->collider());
-            }
+                Collision::is_collide(m_player->collider(), entity->collider()) 
+            )
+        ) {
+            m_player->collide(entity->collider());
+            entity->collide(m_player->collider());
+        }
+        for (auto &tile : m_tiles) {
             if (
-                entity->index != other_entity->index &&                     // not compare entity with itself
-                entity->type() != "tile" &&                                 // not compare tiles
-                Collision::is_collide(entity->collider(), other_entity->collider())
+                Collision::is_collide(entity->collider(), tile->collider())
             ) {
                 // std::cout << "Collision detected for entity " << entity->index << std::endl;
-                entity->collide(other_entity->collider());
+                entity->collide(tile->collider());
             }
         }
     }
+    // collision for tiles
+    for (auto &entity : m_tiles) {
+
+        entity->update();
+        entity->m_position.x += x_modifier;  
+        if (
+            m_player->index != entity->index && (
+                Collision::is_collide(m_player->collider(), entity->collider()) 
+            )
+        ) {
+            m_player->collide(entity->collider());
+            entity->collide(m_player->collider());
+        }
+    }
+
 
 }
 
@@ -86,7 +110,20 @@ void Game::render() {
     // rendering
     m_player->render();
     for (auto &entity : m_content) {
-        entity->render();
+        if (
+            entity->m_position.x + entity->m_position.w > 0 && entity->m_position.x < m_w &&
+            entity->m_position.y + entity->m_position.h > 0 && entity->m_position.y < m_h
+        ) {
+            entity->render();
+        }
+    }
+    for (auto &entity : m_tiles) {
+        if (
+            entity->m_position.x + entity->m_position.w > 0 && entity->m_position.x < m_w &&
+            entity->m_position.y + entity->m_position.h > 0 && entity->m_position.y < m_h
+        ) {
+            entity->render();
+        }
     }
     
     SDL_RenderPresent(TextureManager::renderer);

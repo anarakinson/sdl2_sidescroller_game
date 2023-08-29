@@ -27,6 +27,10 @@ public:
         std::cout << "Entity " << entity->index << " added" << std::endl;
         m_content.emplace_back(std::move(entity)); 
     }
+    void add_tile(std::unique_ptr<Entity> &&entity) noexcept { 
+        std::cout << "Entity " << entity->index << " added" << std::endl;
+        m_tiles.emplace_back(std::move(entity)); 
+    }
 
     bool is_running() { return m_running; } 
     
@@ -45,6 +49,7 @@ private:
     int m_h = 0;
 
     std::vector<std::unique_ptr<Entity>> m_content{};
+    std::vector<std::unique_ptr<Entity>> m_tiles{};
     std::unique_ptr<Player> m_player{nullptr};
     ObjectStatementManager statement_manager{};
 
