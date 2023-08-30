@@ -84,6 +84,8 @@ public:
     int w = 0;
     int h = 0;
 
+    bool right_direction = true;
+
     struct Center {
         Center(int left, int top, int right, int bottom) {
             x = left + right / 2;

@@ -57,7 +57,7 @@ void Game::update() {
     // modifier for move environment 
     int x_modifier = 0;
     int y_modifier = 0;
-    update_position_modifier(x_modifier);
+    update_position_modifier(x_modifier, (m_w / 3), (m_w / 3) * 2 - m_player->m_position.w);
     m_player->m_position.x += x_modifier;
     
     // collisions for entities
@@ -172,10 +172,31 @@ void Game::update_with_modifier(const std::unique_ptr<Entity> &entity, int x_mod
     }
 }
 
-void Game::update_position_modifier(int &modifier) {
-    if (m_player->m_position.x > (m_w / 4) * 3) {
+void Game::update_position_modifier(int &modifier, int left_border = 200, int right_border = 400) {
+    if (
+        m_player->m_position.x > right_border &&
+        m_player->m_position.right_direction == true
+    ) {
         modifier -= m_player->max_speed() + 2;
-    } else if (m_player->m_position.x < m_w / 4) {
+    } 
+    else if (
+        m_player->m_position.x < left_border &&
+        m_player->m_position.right_direction == false
+    ) {
         modifier += m_player->max_speed() + 2;
     }
+
+    if (
+        m_player->m_position.x > left_border &&
+        m_player->m_position.right_direction == true
+    ) {
+        modifier -= m_player->max_speed() + 2;
+    } 
+    else if (
+        m_player->m_position.x < right_border &&
+        m_player->m_position.right_direction == false
+    ) {
+        modifier += m_player->max_speed() + 2;
+    }
+
 }

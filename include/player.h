@@ -34,9 +34,9 @@ public:
         if (m_move_up && m_move_down) { m_move_down = false; }
 
         if (                                                                   // update direction
-            (!m_right_direction && m_move_right) || 
-            (m_right_direction && m_move_left)
-        ) { m_right_direction = !m_right_direction; }
+            (!m_position.right_direction && m_move_right) || 
+            (m_position.right_direction && m_move_left)
+        ) { m_position.right_direction = !m_position.right_direction; }
         
         // process input
         m_input = 0;
@@ -84,7 +84,7 @@ public:
     }
     void render() override { 
         // SDL_RenderCopy(Game::renderer(), m_texture, &m_src_rect, &m_dst_rect);
-        if (!m_right_direction) { m_flip = SDL_FLIP_HORIZONTAL; }
+        if (!m_position.right_direction) { m_flip = SDL_FLIP_HORIZONTAL; }
         else { m_flip = SDL_FLIP_NONE; }
         
         if (m_move_left || m_move_right) {   // walk
@@ -97,7 +97,7 @@ public:
         }
 
         ++m_current_frame;
-        std::cout << m_current_frame << std::endl;
+
     }
     std::string type() override { return "player"; }
 
@@ -114,8 +114,6 @@ public:
 
 
 private:
-
-    bool m_right_direction = true;
 
     bool m_move_left = false;
     bool m_move_right = false;
