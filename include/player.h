@@ -21,10 +21,7 @@ public:
         m_texture = TextureManager::LoadTexture(texturesheet);
         std::cout << "Player character created" << std::endl;
         
-        m_src_rect.x = 500;        // source image coordinates on tileset 
-        m_src_rect.y = 90; 
-        m_src_rect.w = 140;      // source image width and height on tileset 
-        m_src_rect.h = 140; 
+        set_animation_frames();
     }
     ~Player() {
         SDL_DestroyTexture(m_texture);
@@ -89,7 +86,18 @@ public:
         // SDL_RenderCopy(Game::renderer(), m_texture, &m_src_rect, &m_dst_rect);
         if (!m_right_direction) { m_flip = SDL_FLIP_HORIZONTAL; }
         else { m_flip = SDL_FLIP_NONE; }
-        SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
+        
+        if (m_move_left || m_move_right) {   // walk
+            if ((m_current_frame / m_frame_delay_modifier) < 4 || (m_current_frame / m_frame_delay_modifier) >= 9) { m_current_frame = 5 * m_frame_delay_modifier; }
+            SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect[m_current_frame / m_frame_delay_modifier], &m_dst_rect, m_angle, &m_center, m_flip);
+        }
+        else {                               // idle
+            if ((m_current_frame / m_frame_delay_modifier) < 0 || (m_current_frame / m_frame_delay_modifier) >= 4) { m_current_frame = 0 * m_frame_delay_modifier; }
+            SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect[m_current_frame / m_frame_delay_modifier], &m_dst_rect, m_angle, &m_center, m_flip);
+        }
+
+        ++m_current_frame;
+        std::cout << m_current_frame << std::endl;
     }
     std::string type() override { return "player"; }
 
@@ -101,6 +109,8 @@ public:
     int max_speed() { return m_max_speed; }
     // Vector2D velocity() { return m_velocity; }                                 // get velocity
     // void velocity(int x, int y) { m_velocity.x = x; m_velocity.y = y; }        // set velocity
+
+    void set_animation_frames();
 
 
 private:
@@ -117,5 +127,9 @@ private:
 
     Vector2D m_input{};
     int m_gravity = 0;
-    
+
+    SDL_Rect m_src_rect[10];
+    int m_current_frame = 0;
+    int m_frame_delay_modifier = 6;
+
 };

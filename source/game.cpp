@@ -32,13 +32,13 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
             std::cout << "Window created" << std::endl;
         }
 
-        TextureManager::renderer = SDL_CreateRenderer(m_window, -1, 0);               // create renderer
+        TextureManager::renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );               // create renderer
         if (TextureManager::renderer) {
             SDL_SetRenderDrawColor(TextureManager::renderer, 100, 100, 100, 100);
             std::cout << "Window rendered" << std::endl;
         }
 
-        m_player = std::unique_ptr<Player>(new Player{0, 0, 64, 64, "assets/packman_set.png"});
+        m_player = std::unique_ptr<Player>(new Player{0, 0, 64, 64, "assets/player.png"});
 
         m_running = true;                                         // set game running
 

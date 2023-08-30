@@ -9,6 +9,7 @@ add_executable(
     source/test.cpp
     source/game.cpp
     source/collision.cpp
+    source/player.cpp
 )
 
 

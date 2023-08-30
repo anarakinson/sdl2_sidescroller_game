@@ -37,7 +37,7 @@ int main() {
     std::unique_ptr<Enemy> enemy{new Enemy{100, 100, 64, 64, enemy_texture}};
     game.add_entity(std::move(enemy));
 
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 5; ++i) {
         std::unique_ptr<Enemy> enemy1{new Enemy{100 + i, 100 + i, 32, 32, enemy_texture}};
         game.add_entity(std::move(enemy1));
     }
