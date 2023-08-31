@@ -1,13 +1,6 @@
 #include <game.h>
-#include <player.h>
-#include <collision.h>
-#include <texture_manager.h>
 
 
-template <class T>
-std::unique_ptr<T> copy_unique(const std::unique_ptr<T> &source) {
-    return source ? std::make_unique<T>(*source) : nullptr;
-}
 
 // set up entity counter
 int Entity::counter = 0;
@@ -26,7 +19,8 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
     }
 
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {                         // if sdl initialize
-        std::cout << "Initialize subsystem..." << std::endl;   
+        std::cout << "Initialize subsystems..." << std::endl;   
+        
         m_window = SDL_CreateWindow(title, m_x, m_y, m_w, m_h, params);   // create window
         if (m_window) {
             std::cout << "Window created" << std::endl;
@@ -39,6 +33,7 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
         }
 
         m_player = std::unique_ptr<Player>(new Player{0, 0, 64, 64, "assets/player.png"});
+        m_camera.attach(m_player.get());
 
         m_running = true;                                         // set game running
 
@@ -53,17 +48,19 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
 
 void Game::update() {
     // update state
-    m_player->update(); 
+    m_player->update();    
+
     // modifier for move environment 
-    int x_modifier = 0;
-    int y_modifier = 0;
-    update_position_modifier(x_modifier, (m_w / 3), (m_w / 3) * 2 - m_player->m_position.w);
-    m_player->m_position.x += x_modifier;
+    Vector2D modifier{};
+    m_camera.update_position(modifier, (m_w / 3), (m_w / 3) * 2 - m_player->m_position.w);
+    // m_camera.update_position(modifier, (m_w / 3), (m_w / 3) * 2 - m_player->m_position.w, (m_h / 3), (m_h / 3) * 2 - m_player->m_position.h);
+
+    m_player->m_position += modifier;
     
     // collisions for entities
     for (auto &entity : m_content) {
         
-        update_with_modifier(entity, x_modifier);
+        update_and_collide(entity, modifier);
         
         for (auto &other_entity : m_content) {
             if (
@@ -78,9 +75,8 @@ void Game::update() {
     }
     // collision for tiles
     for (auto &entity : m_tiles) {
-        update_with_modifier(entity, x_modifier);
+        update_and_collide(entity, modifier);
     }
-
 
 }
 
@@ -136,6 +132,12 @@ void Game::handle_events() {
                 m_player->move_down(true); 
                 m_player->move_up(false); 
             }
+            if (event.key.keysym.sym == SDLK_z) { 
+                m_player->jump(true); 
+            }
+            if (event.key.keysym.sym == SDLK_q) { 
+                m_camera.attach(m_content[1].get());
+            }
             break;
         case SDL_KEYUP:
             // std::cout << "key up" << std::endl; 
@@ -143,6 +145,10 @@ void Game::handle_events() {
             else if (event.key.keysym.sym == SDLK_RIGHT) { m_player->move_right(false); }
             if (event.key.keysym.sym == SDLK_UP) { m_player->move_up(false); }
             else if (event.key.keysym.sym == SDLK_DOWN) { m_player->move_down(false); }
+            if (event.key.keysym.sym == SDLK_z) { m_player->jump(false); }
+            if (event.key.keysym.sym == SDLK_q) { 
+                m_camera.attach(m_player.get());
+            }
             break;
         case SDL_KEYDOWN && SDL_KEYUP:
             break;
@@ -153,6 +159,7 @@ void Game::handle_events() {
 }
 
 
+// check that entity inside game window
 bool Game::check_entity_position(const std::unique_ptr<Entity> &entity) {
     return (
         entity->m_position.x + entity->m_position.w > 0 && entity->m_position.x < m_w &&
@@ -160,9 +167,10 @@ bool Game::check_entity_position(const std::unique_ptr<Entity> &entity) {
     );
 }
 
-void Game::update_with_modifier(const std::unique_ptr<Entity> &entity, int x_modifier) {
+// update and collide
+void Game::update_and_collide(const std::unique_ptr<Entity> &entity, Vector2D modifier) {
     entity->update();
-    entity->m_position.x += x_modifier;  
+    entity->m_position += modifier;  
     if (
         m_player->index != entity->index && 
         Collision::is_collide(m_player->collider(), entity->collider())
@@ -170,33 +178,4 @@ void Game::update_with_modifier(const std::unique_ptr<Entity> &entity, int x_mod
         m_player->collide(entity->collider());
         entity->collide(m_player->collider());
     }
-}
-
-void Game::update_position_modifier(int &modifier, int left_border = 200, int right_border = 400) {
-    if (
-        m_player->m_position.x > right_border &&
-        m_player->m_position.right_direction == true
-    ) {
-        modifier -= m_player->max_speed() + 2;
-    } 
-    else if (
-        m_player->m_position.x < left_border &&
-        m_player->m_position.right_direction == false
-    ) {
-        modifier += m_player->max_speed() + 2;
-    }
-
-    if (
-        m_player->m_position.x > left_border &&
-        m_player->m_position.right_direction == true
-    ) {
-        modifier -= m_player->max_speed() + 2;
-    } 
-    else if (
-        m_player->m_position.x < right_border &&
-        m_player->m_position.right_direction == false
-    ) {
-        modifier += m_player->max_speed() + 2;
-    }
-
 }

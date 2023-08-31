@@ -9,6 +9,7 @@ class ObjectStatementManager {
 public:
     
 
-private:
-    std::vector<Position2D> m_positions{};
+// private:
+    std::vector<Position2D> entities{};
+    std::vector<Position2D> tiles{};
 };

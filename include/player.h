@@ -18,6 +18,8 @@ public:
         m_position.w = w;
         m_position.h = h;
         
+        m_max_speed = 2;
+
         m_texture = TextureManager::LoadTexture(texturesheet);
         std::cout << "Player character created" << std::endl;
         
@@ -44,10 +46,14 @@ public:
         else if (m_move_right) { m_input.x = 1; }
         if (m_move_up) { m_input.y = -5; }
         else if (m_move_down) { m_input.y = 1; } 
+        // jump
+        if (m_jump && m_down_collision) { m_jump_process = true; }
+        if (m_jump_process && m_jump) { m_input.y = -10; ++jump_counter; }
+        if (jump_counter > m_jump_duration || !m_jump || m_up_collision) { m_jump_process = false; jump_counter = 0; }
 
         // apply gravity
         if (m_down_collision) { m_gravity = 0; } 
-        else { m_gravity = std::min(++m_gravity, m_max_speed + 2); }
+        else { m_gravity = std::min(++m_gravity, m_max_speed + 2); } 
         
         velocity += m_input;
         velocity.y += m_gravity;
@@ -59,7 +65,7 @@ public:
         
         velocity.x = std::max(-m_max_speed, std::min(velocity.x, m_max_speed));
         velocity.y = std::max(-m_max_speed, std::min(velocity.y, m_max_speed));
-        
+    
         // set position
         m_position += velocity;                                      // update position
 
@@ -79,7 +85,12 @@ public:
         m_dst_rect.w = m_position.w;       // game object size in game
         m_dst_rect.h = m_position.h;
 
-        reset_collisions();    
+        std::cout << "m_up_collision: " << m_up_collision 
+                  << " m_down_collision: " << m_down_collision 
+                  << " m_left_collision: " << m_left_collision 
+                  << " m_right_collision: " << m_right_collision << std::endl;
+
+        reset_collisions();  
         
     }
     void render() override { 
@@ -105,10 +116,7 @@ public:
     void move_right(bool state) { m_move_right = state; }
     void move_up(bool state) { m_move_up = state; }
     void move_down(bool state) { m_move_down = state; }
-
-    int max_speed() { return m_max_speed; }
-    // Vector2D velocity() { return m_velocity; }                                 // get velocity
-    // void velocity(int x, int y) { m_velocity.x = x; m_velocity.y = y; }        // set velocity
+    void jump(bool state) { m_jump = state; }
 
     void set_animation_frames();
 
@@ -120,11 +128,14 @@ private:
     bool m_move_up = false;
     bool m_move_down = false;
 
-    int m_max_speed = 2;
-    int m_speed = 0;
+    bool m_jump = false;
+    bool m_jump_process = false;
+    int jump_counter = 0;
+    int m_jump_duration = 60;
+
+    int m_gravity = 0;
 
     Vector2D m_input{};
-    int m_gravity = 0;
 
     SDL_Rect m_src_rect[10];
     int m_current_frame = 0;

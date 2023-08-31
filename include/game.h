@@ -2,6 +2,7 @@
 
 #include <entity.h>
 #include <player.h>
+#include <camera.h>
 #include <collision.h>
 #include <statement_manager.h>
 
@@ -24,11 +25,11 @@ public:
     void handle_events();
 
     void add_entity(std::unique_ptr<Entity> &&entity) noexcept { 
-        std::cout << "Entity " << entity->index << " added" << std::endl;
+        // std::cout << "Entity " << entity->index << " added" << std::endl;
         m_content.emplace_back(std::move(entity)); 
     }
     void add_tile(std::unique_ptr<Entity> &&entity) noexcept { 
-        std::cout << "Entity " << entity->index << " added" << std::endl;
+        // std::cout << "Entity " << entity->index << " added" << std::endl;
         m_tiles.emplace_back(std::move(entity)); 
     }
 
@@ -51,9 +52,11 @@ private:
     std::vector<std::unique_ptr<Entity>> m_content{};
     std::vector<std::unique_ptr<Entity>> m_tiles{};
     std::unique_ptr<Player> m_player{nullptr};
-    ObjectStatementManager statement_manager{};
 
-    inline void update_with_modifier(const std::unique_ptr<Entity> &entity, int x_modifier);
+    ObjectStatementManager statement_manager{};
+    Camera m_camera{};
+
+    inline void update_and_collide(const std::unique_ptr<Entity> &entity, Vector2D modifier);
     inline bool check_entity_position(const std::unique_ptr<Entity> &entity);
-    inline void update_position_modifier(int &modifier, int, int);
+
 };

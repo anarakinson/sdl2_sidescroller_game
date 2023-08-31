@@ -37,10 +37,10 @@ public:
         m_left_collision = Collision::left_collision(m_position, collider);
         m_right_collision = Collision::right_collision(m_position, collider);
 
-        if (m_up_collision) { m_position.y = collider.y + collider.h; }
-        if (m_down_collision) { m_position.y = collider.y - m_position.h; }
         if (m_left_collision) { m_position.x = collider.x + collider.w; }
         if (m_right_collision) { m_position.x = collider.x - m_position.w; }
+        if (m_up_collision) { m_position.y = collider.y + collider.h; }
+        if (m_down_collision) { m_position.y = collider.y - m_position.h; }
     }
 
     void reset_collisions() {
@@ -55,11 +55,14 @@ public:
     static int counter;
     int index;
 
+    int max_speed() { return m_max_speed; }
     Vector2D velocity{};
     Position2D m_position{};
 
 protected:
     
+    int m_max_speed = 0;
+
     double m_angle = 0;
 
     // SDL_RendererFlip flip = SDL_FLIP_NONE | SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL;

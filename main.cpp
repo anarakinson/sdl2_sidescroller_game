@@ -65,6 +65,8 @@ int main() {
     game.add_tile(std::move(tile2));
     std::unique_ptr<Tile> tile3{new Tile{228, 500-64, 64, 64, tile_texture}};
     game.add_tile(std::move(tile3));
+    std::unique_ptr<Tile> tile4{new Tile{328, 500-64, 64, 64, tile_texture}};
+    game.add_tile(std::move(tile4));
     
     /*---------------------------------------------------------------------------*/
     // set frame rate variables
@@ -95,8 +97,6 @@ int main() {
             SDL_Delay(update_delay - update_duration);
         }
     }
-
-    game.clean();
 
     return 0;
 

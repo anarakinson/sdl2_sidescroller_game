@@ -15,7 +15,6 @@ class Tile : public Entity {
 public:
     Tile() = default;
     ~Tile() {
-        std::cout << "Tile destructed" << std::endl;
         SDL_DestroyTexture(m_texture);
     }
     
