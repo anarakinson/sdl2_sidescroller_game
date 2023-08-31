@@ -32,10 +32,10 @@ public:
     void collide(const Position2D &collider) {
         m_is_collide = Collision::is_collide(m_position, collider);
 
-        m_up_collision += Collision::up_collision(m_position, collider);
-        m_left_collision += Collision::left_collision(m_position, collider);
-        m_right_collision += Collision::right_collision(m_position, collider);
-        m_down_collision += Collision::down_collision(m_position, collider);
+        m_up_collision = m_up_collision == true ? true : Collision::up_collision(m_position, collider);
+        m_left_collision = m_left_collision == true ? true : Collision::left_collision(m_position, collider);
+        m_right_collision = m_right_collision == true ? true : Collision::right_collision(m_position, collider);
+        m_down_collision = m_down_collision == true ? true : Collision::down_collision(m_position, collider);
 
         // if (type() != "tile") {
         //     if (m_left_collision) { m_position.x = collider.x + collider.w; }
