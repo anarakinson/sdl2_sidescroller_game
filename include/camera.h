@@ -21,13 +21,15 @@ public:
         /* ----- horizontal ----- */
         if (
             m_owner->m_position.x > right_border || 
-            ( m_owner->m_position.right_direction == true && m_owner->m_position.x > left_border )
+            ( m_owner->m_position.right_direction == true && 
+            m_owner->m_position.x > left_border && m_owner->m_position.x > left_border + 20 )
         ) {
             modifier.x -= m_owner->max_speed() + 2;
         } 
         else if (
             m_owner->m_position.x < left_border || 
-            ( m_owner->m_position.right_direction == false && m_owner->m_position.x < right_border )
+            ( m_owner->m_position.right_direction == false && 
+            m_owner->m_position.x < right_border && m_owner->m_position.x < right_border - 20 )
         ) {
             modifier.x += m_owner->max_speed() + 2;
         }
