@@ -26,12 +26,19 @@ int main() {
 
     // gametest::test();
 
+    // init game
     static Game game;
     game.init("game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height);
 
     /*--------------------------------------------------------------------------*/
+
+    SDL_Texture *player_texture = TextureManager::LoadTexture("assets/player.png");
     SDL_Texture *tile_texture = TextureManager::LoadTexture("assets/solid.png");
     SDL_Texture *enemy_texture = TextureManager::LoadTexture("assets/packman_set.png");
+
+    // add player
+    std::unique_ptr<Player> player{new Player{30, 30, 64, 64, player_texture}};
+    game.add_player(std::move(player));
 
     // add enemies
     std::unique_ptr<Enemy> enemy{new Enemy{100, 100, 64, 64, enemy_texture}};
@@ -56,7 +63,7 @@ int main() {
         std::unique_ptr<Tile> tile1{new Tile{i * 64 - 50, -10, 64, 64, tile_texture}};
         game.add_tile(std::move(tile1));
     }
-    for (int i = 0; i < 120; ++i) {
+    for (int i = 0; i < 20; ++i) {
         std::unique_ptr<Tile> tile1{new Tile{-50, i * 64 - 100, 64, 64, tile_texture}};
         game.add_tile(std::move(tile1));
     }
@@ -67,7 +74,8 @@ int main() {
     game.add_tile(std::move(tile3));
     std::unique_ptr<Tile> tile4{new Tile{328, 500-64, 64, 64, tile_texture}};
     game.add_tile(std::move(tile4));
-    
+
+
     /*---------------------------------------------------------------------------*/
     // set frame rate variables
     uint32_t update_start;

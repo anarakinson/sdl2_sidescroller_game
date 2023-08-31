@@ -12,7 +12,7 @@
 
 class Player : public Entity {
 public:
-    Player(int x, int y, int w, int h, const char *texturesheet) {
+    Player(int x, int y, int w, int h, SDL_Texture *texture) {
         m_position.x = x;
         m_position.y = y;
         m_position.w = w;
@@ -20,7 +20,7 @@ public:
         
         m_max_speed = 2;
 
-        m_texture = TextureManager::LoadTexture(texturesheet);
+        m_texture = texture;
         std::cout << "Player character created" << std::endl;
         
         set_animation_frames();
@@ -84,11 +84,6 @@ public:
         m_dst_rect.y = m_position.y;
         m_dst_rect.w = m_position.w;       // game object size in game
         m_dst_rect.h = m_position.h;
-
-        std::cout << "m_up_collision: " << m_up_collision 
-                  << " m_down_collision: " << m_down_collision 
-                  << " m_left_collision: " << m_left_collision 
-                  << " m_right_collision: " << m_right_collision << std::endl;
 
         reset_collisions();  
         

@@ -32,8 +32,9 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
             std::cout << "Window rendered" << std::endl;
         }
 
-        m_player = std::unique_ptr<Player>(new Player{0, 0, 64, 64, "assets/player.png"});
-        m_camera.attach(m_player.get());
+        // SDL_Texture *player_texture = TextureManager::LoadTexture("assets/player.png");
+        // m_player = std::unique_ptr<Player>(new Player{0, 0, 64, 64, });
+        // m_camera.attach(m_player.get());
 
         m_running = true;                                         // set game running
 
@@ -175,7 +176,9 @@ void Game::update_and_collide(const std::unique_ptr<Entity> &entity, Vector2D mo
         m_player->index != entity->index && 
         Collision::is_collide(m_player->collider(), entity->collider())
     ) {
-        m_player->collide(entity->collider());
         entity->collide(m_player->collider());
+        m_player->collide(entity->collider());
+        // std::cout << entity->index << " ";
+        // m_player->print_data();
     }
 }

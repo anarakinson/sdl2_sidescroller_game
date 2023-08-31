@@ -32,15 +32,17 @@ public:
     void collide(const Position2D &collider) {
         m_is_collide = Collision::is_collide(m_position, collider);
 
-        m_up_collision = Collision::up_collision(m_position, collider);
-        m_down_collision = Collision::down_collision(m_position, collider);
-        m_left_collision = Collision::left_collision(m_position, collider);
-        m_right_collision = Collision::right_collision(m_position, collider);
+        m_up_collision += Collision::up_collision(m_position, collider);
+        m_left_collision += Collision::left_collision(m_position, collider);
+        m_right_collision += Collision::right_collision(m_position, collider);
+        m_down_collision += Collision::down_collision(m_position, collider);
 
-        if (m_left_collision) { m_position.x = collider.x + collider.w; }
-        if (m_right_collision) { m_position.x = collider.x - m_position.w; }
-        if (m_up_collision) { m_position.y = collider.y + collider.h; }
-        if (m_down_collision) { m_position.y = collider.y - m_position.h; }
+        // if (type() != "tile") {
+        //     if (m_left_collision) { m_position.x = collider.x + collider.w; }
+        //     if (m_right_collision) { m_position.x = collider.x - m_position.w; }
+        //     if (m_up_collision) { m_position.y = collider.y + collider.h; }
+        //     if (m_down_collision) { m_position.y = collider.y - m_position.h; }
+        // }
     }
 
     void reset_collisions() {
@@ -48,6 +50,17 @@ public:
         m_up_collision = false;
         m_left_collision = false;
         m_right_collision = false;
+    }
+
+    void print_data() {
+        std::cout << "m_up_collision: " << m_up_collision 
+            << " m_down_collision: " << m_down_collision 
+            << " m_left_collision: " << m_left_collision 
+            << " m_right_collision: " << m_right_collision 
+            << " m_x: " << m_position.x 
+            << " m_y: " << m_position.y 
+            
+            << std::endl;
     }
 
     virtual Position2D collider() { return m_position; }

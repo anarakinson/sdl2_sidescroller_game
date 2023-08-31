@@ -37,6 +37,8 @@ public:
     
     void init() override {}
     void update() override {
+        // reset_collisions();
+
         m_dst_rect.x = m_position.x;      // game object coordinates in game
         m_dst_rect.y = m_position.y;
         m_dst_rect.w = m_position.w;       // game object size in game

@@ -32,6 +32,10 @@ public:
         // std::cout << "Entity " << entity->index << " added" << std::endl;
         m_tiles.emplace_back(std::move(entity)); 
     }
+    void add_player(std::unique_ptr<Player> &&player) {
+        m_player = std::move(player);
+        m_camera.attach(m_player.get());
+    }
 
     bool is_running() { return m_running; } 
     
@@ -51,7 +55,7 @@ private:
 
     std::vector<std::unique_ptr<Entity>> m_content{};
     std::vector<std::unique_ptr<Entity>> m_tiles{};
-    std::unique_ptr<Player> m_player{nullptr};
+    std::unique_ptr<Player> m_player{};
 
     ObjectStatementManager statement_manager{};
     Camera m_camera{};
