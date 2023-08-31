@@ -37,7 +37,7 @@ int main() {
     SDL_Texture *enemy_texture = TextureManager::LoadTexture("assets/packman_set.png");
 
     // add player
-    std::unique_ptr<Player> player{new Player{30, 30, 64, 64, player_texture}};
+    std::unique_ptr<Player> player{new Player{0, 0, 64, 64, player_texture}};
     game.add_player(std::move(player));
 
     // add enemies

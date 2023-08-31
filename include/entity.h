@@ -31,18 +31,19 @@ public:
 
     void collide(const Position2D &collider) {
         m_is_collide = Collision::is_collide(m_position, collider);
+        m_is_stuck = Collision::is_stuck(m_position, collider);
 
         m_up_collision = m_up_collision == true ? true : Collision::up_collision(m_position, collider);
         m_left_collision = m_left_collision == true ? true : Collision::left_collision(m_position, collider);
         m_right_collision = m_right_collision == true ? true : Collision::right_collision(m_position, collider);
         m_down_collision = m_down_collision == true ? true : Collision::down_collision(m_position, collider);
 
-        // if (type() != "tile") {
-        //     if (m_left_collision) { m_position.x = collider.x + collider.w; }
-        //     if (m_right_collision) { m_position.x = collider.x - m_position.w; }
-        //     if (m_up_collision) { m_position.y = collider.y + collider.h; }
-        //     if (m_down_collision) { m_position.y = collider.y - m_position.h; }
-        // }
+        if (m_is_stuck && type() != "tile") {
+            if (m_left_collision) { m_position.x += 4; }
+            if (m_right_collision) { m_position.x -= 4; }
+            if (m_up_collision) { m_position.y += 4; }
+            if (m_down_collision) { m_position.y -= 4; }
+        }
     }
 
     void reset_collisions() {
@@ -87,6 +88,7 @@ protected:
     SDL_Point m_center{NULL};
 
     bool m_is_collide = false;
+    bool m_is_stuck = false;
 
     bool m_down_collision = false;
     bool m_up_collision = false;

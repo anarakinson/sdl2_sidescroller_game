@@ -16,6 +16,20 @@ bool Collision::is_collide(const Position2D &A, const Position2D &B) {
     return false;
 }
 
+
+bool Collision::is_stuck(const Position2D &A, const Position2D &B) {
+
+    if (
+        A.left_side() < B.right_side() - 4 &&
+        A.right_side() > B.left_side() + 4 &&
+        A.up_side() < B.down_side() - 4 &&
+        A.down_side() > B.up_side() + 4 
+    ) {
+        return true;
+    }
+    return false;
+}
+
 bool Collision::up_collision(const Position2D &A, const Position2D &B) {
     Position2D::Center A_center = A.center();
     Position2D::Center B_center = B.center();
