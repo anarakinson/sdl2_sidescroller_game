@@ -49,17 +49,23 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
 
 void Game::update() {
     // update state
+    if (m_scale != 1) {
+        m_player->set_scale(m_scale);
+    }
     m_player->update();    
 
     // modifier for move environment 
     Vector2D modifier{};
-    m_camera.update_position(modifier, (m_w / 3), (m_w / 3) * 2 - m_player->m_position.w);
+    m_camera.update_position(modifier, m_scale);
     // m_camera.update_position(modifier, (m_w / 3), (m_w / 3) * 2 - m_player->m_position.w, (m_h / 3), (m_h / 3) * 2 - m_player->m_position.h);
 
     m_player->m_position += modifier;
     
     // collisions for entities
     for (auto &entity : m_content) {
+        if (m_scale != 1) {
+            entity->set_scale(m_scale);
+        }
         
         update_and_collide(entity, modifier);
         
@@ -76,6 +82,9 @@ void Game::update() {
     }
     // collision for tiles
     for (auto &entity : m_tiles) {
+        if (m_scale != 1) {
+            entity->set_scale(m_scale);
+        }
         update_and_collide(entity, modifier);
     }
 
@@ -139,6 +148,12 @@ void Game::handle_events() {
             if (event.key.keysym.sym == SDLK_q) { 
                 m_camera.attach(m_content[1].get());
             }
+            if (event.key.keysym.sym == SDLK_w) { 
+                if (m_scale < 1.8) m_scale += 0.01;
+            }
+            if (event.key.keysym.sym == SDLK_e) { 
+                if (m_scale > 0.2) m_scale -= 0.01;
+            }
             break;
         case SDL_KEYUP:
             // std::cout << "key up" << std::endl; 
@@ -163,8 +178,8 @@ void Game::handle_events() {
 // check that entity inside game window
 bool Game::check_entity_position(const std::unique_ptr<Entity> &entity) {
     return (
-        entity->m_position.x + entity->m_position.w > 0 && entity->m_position.x < m_w &&
-        entity->m_position.y + entity->m_position.h > 0 && entity->m_position.y < m_h
+        (entity->m_position.x + entity->m_position.w) / m_scale > 0 && entity->m_position.x < m_w / m_scale &&
+        (entity->m_position.y + entity->m_position.h) / m_scale > 0 && entity->m_position.y < m_h / m_scale
     );
 }
 

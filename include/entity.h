@@ -30,14 +30,17 @@ public:
     void set_position(int x, int y) { m_position.x = x; m_position.y = y;}
 
     void collide(const Position2D &collider) {
+        // check collision and stucking
         m_is_collide = Collision::is_collide(m_position, collider);
         m_is_stuck = Collision::is_stuck(m_position, collider);
 
+        // update collision states
         m_up_collision = m_up_collision == true ? true : Collision::up_collision(m_position, collider);
         m_left_collision = m_left_collision == true ? true : Collision::left_collision(m_position, collider);
         m_right_collision = m_right_collision == true ? true : Collision::right_collision(m_position, collider);
         m_down_collision = m_down_collision == true ? true : Collision::down_collision(m_position, collider);
 
+        // stuck in wall resolution
         if (m_is_stuck && type() != "tile") {
             if (m_left_collision) { m_position.x += 4; }
             if (m_right_collision) { m_position.x -= 4; }
@@ -46,6 +49,7 @@ public:
         }
     }
 
+    // reset all collisions to false
     void reset_collisions() {
         m_down_collision = false;
         m_up_collision = false;
@@ -53,6 +57,9 @@ public:
         m_right_collision = false;
     }
 
+    void set_scale(double scale) { m_scale = scale; }
+
+    // debugging output
     void print_data() {
         std::cout << "m_up_collision: " << m_up_collision 
             << " m_down_collision: " << m_down_collision 
@@ -78,6 +85,7 @@ protected:
     int m_max_speed = 0;
 
     double m_angle = 0;
+    double m_scale = 1;
 
     // SDL_RendererFlip flip = SDL_FLIP_NONE | SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL;
     SDL_RendererFlip m_flip = SDL_FLIP_NONE;

@@ -39,10 +39,10 @@ public:
     void update() override {
         // reset_collisions();
 
-        m_dst_rect.x = m_position.x;      // game object coordinates in game
-        m_dst_rect.y = m_position.y;
-        m_dst_rect.w = m_position.w;       // game object size in game
-        m_dst_rect.h = m_position.h;
+        m_dst_rect.x = m_position.x * m_scale;      // game object coordinates in game
+        m_dst_rect.y = m_position.y * m_scale;
+        m_dst_rect.w = m_position.w * m_scale;       // game object size in game
+        m_dst_rect.h = m_position.h * m_scale;
     }
     void render() override { 
         SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);

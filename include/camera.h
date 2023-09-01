@@ -17,29 +17,46 @@ public:
         
     }
 
-    void update_position(Vector2D &modifier, int left_border = 200, int right_border = 400, int top_border = 350, int bottom_border = 400) {
+    void update_position(Vector2D &modifier, double scaler, int margine = 200, int top_border = 350, int bottom_border = 400) {
         /* ----- horizontal ----- */
+        int left_border = 0;
+        int right_border = 800;
+        margine = scaler < 1 ? margine : margine / scaler;
+        left_border += margine;
+        right_border -= margine;
+        
+        double x_speed_modifier = 1;
+
+        double position_x = m_owner->m_position.x * scaler;
+        double position_y = m_owner->m_position.y * scaler;
+        double position_w = m_owner->m_position.w * scaler;
+        double position_h = m_owner->m_position.h * scaler;
+
+        right_border = right_border - position_w;
+        
+        std::cout << left_border << " " << right_border << std::endl;
+        
         if (
-            m_owner->m_position.x > right_border || 
+            position_x > right_border || 
             ( m_owner->m_position.right_direction == true && 
-            m_owner->m_position.x > left_border && m_owner->m_position.x > left_border + 20 )
+            position_x > left_border && position_x > left_border + position_w )
         ) {
-            modifier.x -= m_owner->max_speed() + 2;
+            modifier.x -= (m_owner->max_speed() * 2) * x_speed_modifier;
         } 
         else if (
-            m_owner->m_position.x < left_border || 
+            position_x < left_border || 
             ( m_owner->m_position.right_direction == false && 
-            m_owner->m_position.x < right_border && m_owner->m_position.x < right_border - 20 )
+            position_x < right_border && position_x < right_border - position_w )
         ) {
-            modifier.x += m_owner->max_speed() + 2;
+            modifier.x += (m_owner->max_speed() * 2) * x_speed_modifier;
         }
         
         /* ----- vertical ----- */
-        if (m_owner->m_position.y > bottom_border) {
-            modifier.y -= m_owner->max_speed() + 2;
+        if (position_y > bottom_border) {
+            modifier.y -= (m_owner->max_speed() * 2) * x_speed_modifier;
         } 
-        else if (m_owner->m_position.y < top_border) {
-            modifier.y += m_owner->max_speed() + 2;
+        else if (position_y < top_border) {
+            modifier.y += (m_owner->max_speed() * 2) * x_speed_modifier;
         }
 
     }

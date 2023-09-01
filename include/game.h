@@ -53,6 +53,8 @@ private:
     int m_w = 0;
     int m_h = 0;
 
+    double m_scale = 1;
+
     std::vector<std::unique_ptr<Entity>> m_content{};
     std::vector<std::unique_ptr<Entity>> m_tiles{};
     std::unique_ptr<Player> m_player{};

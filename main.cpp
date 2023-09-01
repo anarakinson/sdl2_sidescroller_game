@@ -54,7 +54,7 @@ int main() {
         std::unique_ptr<Tile> tile{new Tile{i * 90 + 150, 200, 90, 90, tile_texture}};
         game.add_tile(std::move(tile));
     }
-    for (int i = 0; i < 120; ++i) {
+    for (int i = 0; i < 1200; ++i) {
         std::unique_ptr<Tile> tile1{new Tile{i * 64 - 50, 500, 64, 64, tile_texture}};
         if (i % 3 == 0) { tile1->hflip(); }
         game.add_tile(std::move(tile1));
