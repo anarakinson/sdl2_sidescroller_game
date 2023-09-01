@@ -3,6 +3,7 @@
 #include <entity.h>
 #include <player.h>
 #include <camera.h>
+#include <background.h>
 #include <collision.h>
 #include <statement_manager.h>
 
@@ -32,6 +33,10 @@ public:
         // std::cout << "Entity " << entity->index << " added" << std::endl;
         m_tiles.emplace_back(std::move(entity)); 
     }
+    void add_background_layer(std::unique_ptr<Background> &&layer) noexcept { 
+        // std::cout << "Entity " << entity->index << " added" << std::endl;
+        m_background.emplace_back(std::move(layer)); 
+    }
     void add_player(std::unique_ptr<Player> &&player) {
         m_player = std::move(player);
         m_camera.attach(m_player.get());
@@ -46,6 +51,7 @@ public:
 private:
     SDL_Window *m_window;
     
+    int m_counter = 0;
     bool m_running = false;
 
     int m_x = 0;   // game window parameters
@@ -57,6 +63,7 @@ private:
 
     std::vector<std::unique_ptr<Entity>> m_content{};
     std::vector<std::unique_ptr<Entity>> m_tiles{};
+    std::vector<std::unique_ptr<Background>> m_background{};
     std::unique_ptr<Player> m_player{};
 
     ObjectStatementManager statement_manager{};

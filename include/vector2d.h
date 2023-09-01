@@ -75,6 +75,27 @@ inline Vector2D operator / (Vector2D lhs, const Vector2D &rhs) {
     return lhs; 
 }
 
+inline Vector2D operator + (Vector2D lhs, int rhs) { 
+    lhs.x += rhs;
+    lhs.y += rhs;
+    return lhs; 
+}
+inline Vector2D operator - (Vector2D lhs, int rhs) { 
+    lhs.x -= rhs;
+    lhs.y -= rhs;
+    return lhs; 
+}
+inline Vector2D operator * (Vector2D lhs, int rhs) { 
+    lhs.x *= rhs;
+    lhs.y *= rhs;
+    return lhs; 
+}
+inline Vector2D operator / (Vector2D lhs, int rhs) { 
+    lhs.x /= rhs;
+    lhs.y /= rhs;
+    return lhs; 
+}
+
 
 
 class Position2D {

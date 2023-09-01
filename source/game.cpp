@@ -49,24 +49,31 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
 
 void Game::update() {
     // update state
-    if (m_scale != 1) {
-        m_player->set_scale(m_scale);
-    }
-    m_player->update();    
 
     // modifier for move environment 
     Vector2D modifier{};
     m_camera.update_position(modifier, m_scale);
     // m_camera.update_position(modifier, (m_w / 3), (m_w / 3) * 2 - m_player->m_position.w, (m_h / 3), (m_h / 3) * 2 - m_player->m_position.h);
 
+    // update background
+    int layer_counter = 0;
+    int layer_depth = m_background.size() + 2;
+    for (auto &layer : m_background) {
+        ++layer_counter;
+        layer->set_scale(m_scale);     
+        layer->update();
+        layer->m_position += (modifier / (layer_depth - layer_counter));
+    }
+
+    // update player
+    m_player->set_scale(m_scale);
+    m_player->update();    
     m_player->m_position += modifier;
     
     // collisions for entities
     for (auto &entity : m_content) {
-        if (m_scale != 1) {
-            entity->set_scale(m_scale);
-        }
-        
+
+        entity->set_scale(m_scale);     
         update_and_collide(entity, modifier);
         
         for (auto &other_entity : m_content) {
@@ -82,9 +89,8 @@ void Game::update() {
     }
     // collision for tiles
     for (auto &entity : m_tiles) {
-        if (m_scale != 1) {
-            entity->set_scale(m_scale);
-        }
+
+        entity->set_scale(m_scale);
         update_and_collide(entity, modifier);
     }
 
@@ -95,6 +101,9 @@ void Game::render() {
     SDL_RenderClear(TextureManager::renderer);
 
     // rendering
+    for (auto &layer : m_background) {
+        layer->render();
+    }
     m_player->render();
     for (auto &entity : m_content) {
         if (check_entity_position(entity)) { entity->render(); }

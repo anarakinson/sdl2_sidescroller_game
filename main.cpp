@@ -3,6 +3,7 @@
 #include <entity.h>
 #include <player.h>
 #include <enemy.h>
+#include <background.h>
 #include <levels/level1.h>
 
 #include <iostream>
@@ -35,10 +36,18 @@ int main() {
     SDL_Texture *player_texture = TextureManager::LoadTexture("assets/player.png");
     SDL_Texture *tile_texture = TextureManager::LoadTexture("assets/solid.png");
     SDL_Texture *enemy_texture = TextureManager::LoadTexture("assets/packman_set.png");
+    SDL_Texture *background_layer_texture_0 = TextureManager::LoadTexture("assets/background.png");
+    SDL_Texture *background_layer_texture_1 = TextureManager::LoadTexture("assets/bg_2.png");
 
     // add player
     std::unique_ptr<Player> player{new Player{0, 0, 64, 64, player_texture}};
     game.add_player(std::move(player));
+
+    // add background
+    std::unique_ptr<Background> background_layer0{new Background{0, 0, 800, 600, background_layer_texture_0}};
+    std::unique_ptr<Background> background_layer1{new Background{0, 0, 800, 600, background_layer_texture_1}};
+    game.add_background_layer(std::move(background_layer0));
+    game.add_background_layer(std::move(background_layer1));
 
     // add enemies
     std::unique_ptr<Enemy> enemy{new Enemy{100, 100, 64, 64, enemy_texture}};

@@ -34,7 +34,7 @@ public:
 
         right_border = right_border - position_w;
         
-        std::cout << left_border << " " << right_border << std::endl;
+        // std::cout << left_border << " " << right_border << std::endl;
         
         if (
             position_x > right_border || 
