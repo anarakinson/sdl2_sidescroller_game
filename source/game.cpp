@@ -32,9 +32,9 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
             std::cout << "Window rendered" << std::endl;
         }
 
-        // SDL_Texture *player_texture = TextureManager::LoadTexture("assets/player.png");
-        // m_player = std::unique_ptr<Player>(new Player{0, 0, 64, 64, });
-        // m_camera.attach(m_player.get());
+        if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == 0) {
+            std::cout << "Audio start" << std::endl;
+        }
 
         m_running = true;                                         // set game running
 
@@ -62,7 +62,7 @@ void Game::update() {
         ++layer_counter;
         layer->set_scale(m_scale);     
         layer->update();
-        layer->m_position += (modifier / (layer_depth - layer_counter));
+        layer->m_position.x += (modifier.x / (layer_depth - layer_counter));
     }
 
     // update player
@@ -162,6 +162,9 @@ void Game::handle_events() {
             }
             if (event.key.keysym.sym == SDLK_e) { 
                 if (m_scale > 0.2) m_scale -= 0.01;
+            }
+            if (event.key.keysym.sym == SDLK_ESCAPE) { 
+                m_paused = !m_paused;
             }
             break;
         case SDL_KEYUP:

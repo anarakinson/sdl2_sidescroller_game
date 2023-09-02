@@ -40,11 +40,7 @@ public:
         if (move_down) { ++m_position.y; }
         else { --m_position.y; }
 
-        m_dst_rect.x = m_position.x * m_scale;      // game object coordinates in game
-        m_dst_rect.y = m_position.y * m_scale;
-        m_dst_rect.w = m_position.w * m_scale;       // game object size in game
-        m_dst_rect.h = m_position.h * m_scale;
-
+        update_position();
         reset_collisions();    
 
     }

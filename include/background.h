@@ -43,23 +43,23 @@ public:
         m_dst_rect.w = m_position.w * m_scale;       // game object size in game
         m_dst_rect.h = m_position.h * m_scale;
         
-        if (m_position.x >= 800) { m_position.x -= 800; }
-        if (m_position.x <= 0) { m_position.x += 800; }
+        if (m_position.x >= m_position.w) { m_position.x -= m_position.w; }
+        if (m_position.x <= 0) { m_position.x += m_position.w; }
 
     }
     void render() {
         SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
-        if (m_position.x <= 800) {
-            m_dst_rect.x = m_position.x + m_position.w * m_scale; 
+        if ((m_position.x) * m_scale < m_position.w) {
+            m_dst_rect.x = (m_position.x - 4 + m_position.w) * m_scale; 
             SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
         }
-        if (m_dst_rect.w >= 0) {
-            m_dst_rect.x = m_position.x - m_position.w * m_scale; 
+        if ((m_position.x + m_dst_rect.w) * m_scale > 0) {
+            m_dst_rect.x = (m_position.x - m_position.w) * m_scale; 
             SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
         }
     }
 
-    void set_scale(double scale) { m_scale = 1; }    
+    void set_scale(double scale) { m_scale = 0.6 + scale / 2; }    
     Position2D m_position{};
 
 private:

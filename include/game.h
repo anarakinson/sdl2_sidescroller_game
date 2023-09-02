@@ -10,6 +10,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 #include <vector>
 
 
@@ -43,6 +44,7 @@ public:
     }
 
     bool is_running() { return m_running; } 
+    bool is_paused() { return m_paused; } 
     
     int window_height() { return m_h; }   
     int window_width() { return m_w; }
@@ -53,6 +55,7 @@ private:
     
     int m_counter = 0;
     bool m_running = false;
+    bool m_paused = false;
 
     int m_x = 0;   // game window parameters
     int m_y = 0;

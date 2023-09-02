@@ -2,7 +2,7 @@ cd ..
 
 git clone https://github.com/Microsoft/vcpkg.git
 
-./vcpkg/bootstrap-vcpkg.bat
+./vcpkg/bootstrap-vcpkg.sh
 ./vcpkg/vcpkg integrate install
 
 ./vcpkg/vcpkg list

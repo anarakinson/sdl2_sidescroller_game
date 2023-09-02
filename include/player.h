@@ -79,12 +79,7 @@ public:
             if (velocity.y > 0) { --velocity.y; }
         }
     
-
-        m_dst_rect.x = m_position.x * m_scale;      // game object coordinates in game
-        m_dst_rect.y = m_position.y * m_scale;
-        m_dst_rect.w = m_position.w * m_scale;       // game object size in game
-        m_dst_rect.h = m_position.h * m_scale;
-
+        update_position();
         reset_collisions();  
         
     }
@@ -127,6 +122,9 @@ private:
     bool m_jump_process = false;
     int jump_counter = 0;
     int m_jump_duration = 60;
+
+    int m_max_hitpoints = 5;
+    int m_hitpoints = m_max_hitpoints;
 
     int m_gravity = 0;
 
