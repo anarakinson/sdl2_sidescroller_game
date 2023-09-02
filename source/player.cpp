@@ -54,5 +54,16 @@ void Player::set_animation_frames() {
     m_src_rect[9].w = 120;      // source image width and height on tileset 
     m_src_rect[9].h = 160; 
 
+    /* ----- shoot ----- */
+    m_src_rect[10].x = 400;        // source image coordinates on tileset 
+    m_src_rect[10].y = 930; 
+    m_src_rect[10].w = 120;      // source image width and height on tileset 
+    m_src_rect[10].h = 160; 
+
+    m_src_rect[11].x = 620;        // source image coordinates on tileset 
+    m_src_rect[11].y = 930; 
+    m_src_rect[11].w = 120;      // source image width and height on tileset 
+    m_src_rect[11].h = 160; 
+
     
 }

@@ -6,6 +6,10 @@
 int Entity::counter = 0;
 SDL_Renderer *TextureManager::renderer = nullptr;
 
+// set static textures
+SDL_Texture *ProjectileTexture::projectile_bubble_texture = nullptr;
+
+
 void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) {
 
     m_x = x; 
@@ -35,6 +39,8 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
         if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == 0) {
             std::cout << "Audio start" << std::endl;
         }
+        
+        ProjectileTexture::load_textures();
 
         m_running = true;                                         // set game running
 
@@ -69,6 +75,12 @@ void Game::update() {
     m_player->set_scale(m_scale);
     m_player->update();    
     m_player->m_position += modifier;
+
+    for (auto &projectile : m_player->m_projectiles) {
+        projectile->set_scale(m_scale);    
+        projectile->m_position += modifier;
+        projectile->update();
+    }
     
     // collisions for entities
     for (auto &entity : m_content) {
@@ -100,14 +112,23 @@ void Game::update() {
 void Game::render() {
     SDL_RenderClear(TextureManager::renderer);
 
-    // rendering
+    /* ------ rendering ------ */
+    //
     for (auto &layer : m_background) {
         layer->render();
     }
+    //player
     m_player->render();
+    
+    // players projectiles
+    for (auto &projectile : m_player->m_projectiles) {
+        if (check_entity_position(projectile)) { projectile->render(); }
+    }
+    // Entities
     for (auto &entity : m_content) {
         if (check_entity_position(entity)) { entity->render(); }
     }
+    // Tiles
     for (auto &entity : m_tiles) {
         if (check_entity_position(entity)) { entity->render(); }
     }
@@ -154,6 +175,9 @@ void Game::handle_events() {
             if (event.key.keysym.sym == SDLK_z) { 
                 m_player->jump(true); 
             }
+            if (event.key.keysym.sym == SDLK_x) { 
+                m_player->shoot(true); 
+            }
             if (event.key.keysym.sym == SDLK_q) { 
                 m_camera.attach(m_content[1].get());
             }
@@ -174,6 +198,7 @@ void Game::handle_events() {
             if (event.key.keysym.sym == SDLK_UP) { m_player->move_up(false); }
             else if (event.key.keysym.sym == SDLK_DOWN) { m_player->move_down(false); }
             if (event.key.keysym.sym == SDLK_z) { m_player->jump(false); }
+            if (event.key.keysym.sym == SDLK_x) { m_player->shoot(false); }
             if (event.key.keysym.sym == SDLK_q) { 
                 m_camera.attach(m_player.get());
             }

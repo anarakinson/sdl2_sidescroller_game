@@ -4,6 +4,7 @@
 #include <player.h>
 #include <camera.h>
 #include <background.h>
+#include <projectile.h>
 #include <collision.h>
 #include <statement_manager.h>
 

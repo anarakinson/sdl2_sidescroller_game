@@ -23,3 +23,28 @@ public:
     static SDL_Renderer *renderer;
 
 };
+
+
+class ProjectileTexture {
+public:
+    static SDL_Texture *projectile_bubble_texture;
+
+    static void load_textures() {
+        projectile_bubble_texture = TextureManager::LoadTexture("assets/projectiles/bubble.png");
+    }
+
+};
+
+
+
+// class Texture {
+// public:
+//     static SDL_Texture *projectile_bubble_texture;
+//     static SDL_Texture *player_texture;
+//     static SDL_Texture *tile_texture;
+//     static SDL_Texture *enemy_texture;
+//     static SDL_Texture *background_layer_texture_0;
+//     static SDL_Texture *background_layer_texture_1;
+
+// };
+

@@ -28,7 +28,7 @@ int main() {
     game.init("game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height);
     
     // load content
-    load_level1(game);
+    level1::load_level(game);
     
     /*---------------------------------------------------------------------------*/
     // set frame rate variables

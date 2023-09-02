@@ -67,17 +67,17 @@ public:
 
     void set_scale(double scale) { m_scale = scale; }
 
-    // debugging output
-    void print_data() {
-        std::cout << "m_up_collision: " << m_up_collision 
-            << " m_down_collision: " << m_down_collision 
-            << " m_left_collision: " << m_left_collision 
-            << " m_right_collision: " << m_right_collision 
-            << " m_x: " << m_position.x 
-            << " m_y: " << m_position.y 
+    // // debugging output
+    // void print_data() {
+    //     std::cout << "m_up_collision: " << m_up_collision 
+    //         << " m_down_collision: " << m_down_collision 
+    //         << " m_left_collision: " << m_left_collision 
+    //         << " m_right_collision: " << m_right_collision 
+    //         << " m_x: " << m_position.x 
+    //         << " m_y: " << m_position.y 
             
-            << std::endl;
-    }
+    //         << std::endl;
+    // }
 
     virtual Position2D collider() { return m_position; }
 
