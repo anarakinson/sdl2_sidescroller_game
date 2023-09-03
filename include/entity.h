@@ -11,7 +11,7 @@
 class Entity {
 public:
     explicit Entity() { index = counter++; };
-    virtual ~Entity() noexcept {}
+    virtual ~Entity() noexcept {  }
 
     virtual void init() {}
     virtual void update() {}

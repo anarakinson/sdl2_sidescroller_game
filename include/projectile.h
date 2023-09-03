@@ -20,10 +20,11 @@ public:
 
     Projectile(Position2D position, ProjectileType type, int h_modifier) {
         
+        m_start_position = position;
+
         m_position.x = position.x + position.w / 2;
         m_position.y = position.y + position.h / 2 - h_modifier;
         m_position.right_direction = position.right_direction;
-            
 
         switch(type) {
         case ProjectileType::bubble:
@@ -36,6 +37,8 @@ public:
             m_position.w = 10;
             m_position.h = 10; 
             m_max_speed = 5;
+            m_range = 300;
+
             break;
         default:
             m_src_rect.x = 0;        // source image coordinates on tileset 
@@ -47,8 +50,11 @@ public:
             m_position.w = 10;
             m_position.h = 10;
             m_max_speed = 5;
+            m_range = 300;
         }
     }
+
+    ~Projectile() { std::cout << "done" << std::endl; }
 
     void update() override {
         if (m_position.right_direction) { m_position.x += m_max_speed; }
@@ -63,9 +69,20 @@ public:
         SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
     }
 
+    bool over_range() { 
+        return (
+            m_start_position.x - m_position.x > m_range ||
+            m_start_position.y - m_position.y > m_range ||
+            m_position.x - m_start_position.x > m_range ||
+            m_position.y - m_start_position.y > m_range
+        ); 
+    }
+
     // static SDL_Texture *projectile_bubble_texture;
 
 private:
+    Position2D m_start_position{};
+    int m_range = 0;
 
 };
 

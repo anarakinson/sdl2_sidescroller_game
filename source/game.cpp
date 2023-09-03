@@ -39,7 +39,8 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
         if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == 0) {
             std::cout << "Audio start" << std::endl;
         }
-        
+
+        // add static textures
         ProjectileTexture::load_textures();
 
         m_running = true;                                         // set game running
@@ -76,10 +77,12 @@ void Game::update() {
     m_player->update();    
     m_player->m_position += modifier;
 
-    for (auto &projectile : m_player->m_projectiles) {
+    for (int i = 0; i < m_player->m_projectiles.size(); ++i) {
+        auto &projectile = m_player->m_projectiles[i];
         projectile->set_scale(m_scale);    
         projectile->m_position += modifier;
         projectile->update();
+        if (projectile->over_range()) { m_player->m_projectiles.erase(m_player->m_projectiles.begin() + i); }
     }
     
     // collisions for entities
@@ -122,7 +125,7 @@ void Game::render() {
     
     // players projectiles
     for (auto &projectile : m_player->m_projectiles) {
-        if (check_entity_position(projectile)) { projectile->render(); }
+        { projectile->render(); }
     }
     // Entities
     for (auto &entity : m_content) {
