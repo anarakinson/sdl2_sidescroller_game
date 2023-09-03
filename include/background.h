@@ -38,10 +38,10 @@ public:
     void update() {
         // if counter >= 10
 
-        m_dst_rect.x = (m_position.x - 2) * m_scale;      // game object coordinates in game
-        m_dst_rect.y = (m_position.y - 2) * m_scale;
-        m_dst_rect.w = m_position.w * m_scale;       // game object size in game
-        m_dst_rect.h = m_position.h * m_scale;
+        m_dst_rect.x = static_cast<int>((m_position.x - 2) * m_scale);      // game object coordinates in game
+        m_dst_rect.y = static_cast<int>((m_position.y - 2) * m_scale);
+        m_dst_rect.w = static_cast<int>(m_position.w * m_scale);       // game object size in game
+        m_dst_rect.h = static_cast<int>(m_position.h * m_scale);
         
         if (m_position.x >= m_position.w) { m_position.x -= m_position.w; }
         if (m_position.x <= 0) { m_position.x += m_position.w; }
@@ -50,11 +50,11 @@ public:
     void render() {
         SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
         if ((m_position.x) * m_scale < m_position.w) {
-            m_dst_rect.x = (m_position.x - 4 + m_position.w) * m_scale; 
+            m_dst_rect.x = static_cast<int>((m_position.x - 4 + m_position.w) * m_scale); 
             SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
         }
         if ((m_position.x + m_dst_rect.w) * m_scale > 0) {
-            m_dst_rect.x = (m_position.x - m_position.w) * m_scale; 
+            m_dst_rect.x = static_cast<int>((m_position.x - m_position.w) * m_scale); 
             SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
         }
     }

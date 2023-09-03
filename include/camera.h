@@ -21,16 +21,16 @@ public:
         /* ----- horizontal ----- */
         int left_border = 0;
         int right_border = 800;
-        margine = scaler < 1 ? margine : margine / scaler;
+        margine = scaler < 1 ? margine : static_cast<int>(margine / scaler);
         left_border += margine;
         right_border -= margine;
         
         double x_speed_modifier = 1;
 
-        double position_x = m_owner->m_position.x * scaler;
-        double position_y = m_owner->m_position.y * scaler;
-        double position_w = m_owner->m_position.w * scaler;
-        double position_h = m_owner->m_position.h * scaler;
+        int position_x = static_cast<int>(m_owner->m_position.x * scaler);
+        int position_y = static_cast<int>(m_owner->m_position.y * scaler);
+        int position_w = static_cast<int>(m_owner->m_position.w * scaler);
+        int position_h = static_cast<int>(m_owner->m_position.h * scaler);
 
         right_border = right_border - position_w;
         

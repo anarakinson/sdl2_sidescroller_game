@@ -106,6 +106,9 @@ public:
     int h = 0;
 
     bool right_direction = true;
+    bool left_direction = false;
+    bool top_direction = false;
+    bool bottom_direction = false;
 
     struct Center {
         Center(int left, int top, int right, int bottom) {

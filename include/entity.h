@@ -51,10 +51,10 @@ public:
 
     // update sprite position on display
     void update_position() {
-        m_dst_rect.x = m_position.x * m_scale;      // game object coordinates in game
-        m_dst_rect.y = m_position.y * m_scale;
-        m_dst_rect.w = m_position.w * m_scale;       // game object size in game
-        m_dst_rect.h = m_position.h * m_scale;
+        m_dst_rect.x = static_cast<int>(m_position.x * m_scale);      // game object coordinates in game
+        m_dst_rect.y = static_cast<int>(m_position.y * m_scale);
+        m_dst_rect.w = static_cast<int>(m_position.w * m_scale);       // game object size in game
+        m_dst_rect.h = static_cast<int>(m_position.h * m_scale);
     }
 
     // reset all collisions to false

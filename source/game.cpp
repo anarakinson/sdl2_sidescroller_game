@@ -82,7 +82,7 @@ void Game::update() {
         projectile->set_scale(m_scale);    
         projectile->m_position += modifier;
         projectile->update();
-        if (projectile->over_range()) { m_player->m_projectiles.erase(m_player->m_projectiles.begin() + i); }
+        if (projectile->over_range()) { m_player->projectile_explode(i); }
     }
     
     // collisions for entities

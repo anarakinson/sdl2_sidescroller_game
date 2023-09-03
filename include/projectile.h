@@ -37,7 +37,7 @@ public:
             m_position.w = 10;
             m_position.h = 10; 
             m_max_speed = 5;
-            m_range = 300;
+            m_range = 100;
 
             break;
         default:
@@ -50,7 +50,7 @@ public:
             m_position.w = 10;
             m_position.h = 10;
             m_max_speed = 5;
-            m_range = 300;
+            m_range = 100;
         }
     }
 
@@ -59,6 +59,7 @@ public:
     void update() override {
         if (m_position.right_direction) { m_position.x += m_max_speed; }
         if (!m_position.right_direction) { m_position.x -= m_max_speed; }
+        ++m_counter;
 
         update_position();
     }
@@ -70,12 +71,7 @@ public:
     }
 
     bool over_range() { 
-        return (
-            m_start_position.x - m_position.x > m_range ||
-            m_start_position.y - m_position.y > m_range ||
-            m_position.x - m_start_position.x > m_range ||
-            m_position.y - m_start_position.y > m_range
-        ); 
+        return m_counter > m_range;
     }
 
     // static SDL_Texture *projectile_bubble_texture;
@@ -83,6 +79,7 @@ public:
 private:
     Position2D m_start_position{};
     int m_range = 0;
+    int m_counter = 0;
 
 };
 

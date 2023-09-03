@@ -131,7 +131,7 @@ public:
     void shoot(bool state) { m_shoot = state; }
     // std::vector<std::unique_ptr<Projectile>> projectiles() { return m_projectiles; }
     std::vector<std::unique_ptr<Projectile>> m_projectiles{};
-    void projectile_explode() { m_projectiles.pop_back(); }
+    void projectile_explode(int idx) { m_projectiles.erase(m_projectiles.begin() + idx); }
 
     void update_counters() {
         ++shoot_counter;
