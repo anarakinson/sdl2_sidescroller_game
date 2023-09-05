@@ -27,6 +27,9 @@ public:
         else if (m_flip == SDL_FLIP_HORIZONTAL) { m_flip = SDL_FLIP_NONE; }
     }
 
+    virtual void hit() {}
+
+
     void set_position(int x, int y) { m_position.x = x; m_position.y = y;}
 
     void collide(const Position2D &collider) {

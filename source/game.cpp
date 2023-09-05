@@ -77,12 +77,26 @@ void Game::update() {
     m_player->update();    
     m_player->m_position += modifier;
 
+    // projectiles
     for (int i = 0; i < m_player->m_projectiles.size(); ++i) {
         auto &projectile = m_player->m_projectiles[i];
+        bool explode = false;
         projectile->set_scale(m_scale);    
         projectile->m_position += modifier;
         projectile->update();
-        if (projectile->over_range()) { m_player->projectile_explode(i); }
+        if (projectile->over_range()) { explode = true; }
+        for (auto &tile : m_tiles) {
+            if (Collision::is_collide(projectile->collider(), tile->collider())) { explode = true; }
+        }
+        for (int j = 0; j < m_content.size(); ++j) {
+            auto &entity = m_content[j];
+            if (Collision::is_collide(projectile->collider(), entity->collider())) { 
+                explode = true; 
+                entity->collide(projectile->collider()); 
+            }
+        }
+        if (explode) { m_player->projectile_explode(i); }
+
     }
     
     // collisions for entities
@@ -98,7 +112,10 @@ void Game::update() {
                 entity->index != other_entity->index &&                     // not compare entity with itself
                 entity->type() != "tile" &&                                 // not compare tiles
                 Collision::is_collide(entity->collider(), other_entity->collider())
-            ) { entity->collide(other_entity->collider()); }
+            ) { 
+                entity->collide(other_entity->collider()); 
+                other_entity->collide(entity->collider()); 
+            }
         }
         for (auto &tile : m_tiles) {
             if (Collision::is_collide(entity->collider(), tile->collider())) { entity->collide(tile->collider()); }
@@ -106,7 +123,6 @@ void Game::update() {
     }
     // collision for tiles
     for (auto &entity : m_tiles) {
-
         entity->set_scale(m_scale);
         update_and_collide(entity, modifier);
     }
