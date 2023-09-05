@@ -48,14 +48,13 @@ public:
 
     }
     void render() {
-        SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
-        if ((m_position.x) * m_scale < m_position.w) {
-            m_dst_rect.x = static_cast<int>((m_position.x - 4 + m_position.w) * m_scale); 
-            SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
-        }
-        if ((m_position.x + m_dst_rect.w) * m_scale > 0) {
-            m_dst_rect.x = static_cast<int>((m_position.x - m_position.w) * m_scale); 
-            SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
+        SDL_Rect m_dst_rect_temp{};
+        for (int i = -2; i < 3; ++i) {
+            m_dst_rect_temp.x = m_dst_rect.x + m_dst_rect_temp.w * i;
+            m_dst_rect_temp.y = m_dst_rect.y;
+            m_dst_rect_temp.w = m_dst_rect.w;
+            m_dst_rect_temp.h = m_dst_rect.h;
+            SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect_temp, m_angle, &m_center, m_flip);
         }
     }
 
@@ -71,8 +70,6 @@ private:
     
     SDL_Rect m_src_rect{}; 
     SDL_Rect m_dst_rect{}; 
-    SDL_Rect m_dst_rect_left{}; 
-    SDL_Rect m_dst_rect_right{};
     SDL_Point m_center{NULL};
 
     SDL_Texture *m_texture;
