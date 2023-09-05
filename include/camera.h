@@ -39,38 +39,36 @@ public:
             position_x > right_border || 
             ( m_owner->m_position.right_direction == true && position_x > left_border + position_w )
         ) {
-            // x_speed_modifier = position_x - left_border;
-            modifier.x -= (m_owner->max_speed() + x_speed_modifier);
+
+            modifier.x -= (x_speed_modifier - m_owner->max_speed());
         } 
         else if (
             position_x < left_border || 
             ( m_owner->m_position.right_direction == false && position_x < right_border - position_w )
         ) {
-            // x_speed_modifier = position_x - right_border;
-            modifier.x += (m_owner->max_speed() + x_speed_modifier);
+            
+            modifier.x += (x_speed_modifier - m_owner->max_speed());
         }
         
         /* ----- vertical ----- */
         if (position_y > bottom_border) {
-            modifier.y -= (m_owner->max_speed()) * y_speed_modifier;
+            modifier.y -= (y_speed_modifier - m_owner->max_speed());
         } 
         else if (position_y < top_border) {
-            modifier.y += (m_owner->max_speed()) * y_speed_modifier;
+            modifier.y += (y_speed_modifier - m_owner->max_speed());
         }
 
         if (x_speed_modifier > 15) { x_speed_modifier = 15; }
         if (y_speed_modifier > 15) { y_speed_modifier = 15; }
         
-        if ((position_x > right_border || ( m_owner->m_position.right_direction == true && position_x > left_border + position_w ))
-            || 
-            (position_x < left_border || ( m_owner->m_position.right_direction == false && position_x < right_border - position_w )) 
-            || x_speed_modifier < 0
-        ) { x_speed_modifier++; }
-        else if (x_speed_modifier > 0) { x_speed_modifier--; }
-        if ((position_y > bottom_border) || (position_y < top_border) 
-            || y_speed_modifier < 0
-        ) { y_speed_modifier++; }
-        else if (y_speed_modifier > 0) { y_speed_modifier--; }
+        if ((position_x > right_border || ( m_owner->m_position.right_direction == true && position_x > left_border + position_w )) || 
+            (position_x < left_border || ( m_owner->m_position.right_direction == false && position_x < right_border - position_w )) || 
+            x_speed_modifier < 0
+        ) { x_speed_modifier += 1; }
+        else if (x_speed_modifier > 0) { x_speed_modifier -= 1; }
+        if ((position_y > bottom_border) || (position_y < top_border) || y_speed_modifier < 0
+        ) { y_speed_modifier += 1; }
+        else if (y_speed_modifier > 0) { y_speed_modifier -= 1; }
 
         std::cout << "x: " << position_x << " y: " << position_y << " " << x_speed_modifier << std::endl;
 
