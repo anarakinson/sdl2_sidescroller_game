@@ -35,11 +35,14 @@ public:
         if ((m_position.y + m_dst_rect.h) * m_scale >= 600 || m_down_collision) { move_down = false; }
         else if (m_position.y * m_scale <= 0 || m_up_collision) { move_down = true; }
 
-        if (move_right) { ++m_position.x; }
-        else { --m_position.x; }
-        if (move_down) { ++m_position.y; }
-        else { --m_position.y; }
+        if (move_right) { velocity.x = m_max_speed; }
+        else { velocity.x = -m_max_speed; }
+        if (move_down) { velocity.y = m_max_speed; }
+        else { velocity.y = -m_max_speed; }
 
+        resolve_collisions();
+
+        m_position += velocity;                                      // update position
         update_position();
         reset_collisions();    
 

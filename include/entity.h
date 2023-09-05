@@ -57,6 +57,14 @@ public:
         m_dst_rect.h = static_cast<int>(m_position.h * m_scale);
     }
 
+    // resolve collisions
+    void resolve_collisions() {
+        if (m_up_collision) { velocity.y = velocity.y < 0 ? 0 : velocity.y; }
+        if (m_down_collision) { velocity.y = velocity.y > 0 ? 0 : velocity.y; }
+        if (m_left_collision) { velocity.x = velocity.x < 0 ? 0 : velocity.x; }
+        if (m_right_collision) { velocity.x = velocity.x > 0 ? 0 : velocity.x; }
+    }
+
     // reset all collisions to false
     void reset_collisions() {
         m_down_collision = false;

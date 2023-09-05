@@ -20,7 +20,7 @@ public:
         m_position.w = w;
         m_position.h = h;
         
-        m_max_speed = 2;
+        m_max_speed = 4;
 
         m_texture = texture;
         std::cout << "Player character created" << std::endl;
@@ -48,19 +48,21 @@ public:
         m_input = 0;
         if (m_move_left) { m_input.x = -1; }
         else if (m_move_right) { m_input.x = 1; }
-        if (m_move_up) { m_input.y = -5; }
+        if (m_move_up) { m_input.y = -10; }
         else if (m_move_down) { m_input.y = 1; } 
         // jump
-        if (m_jump && m_down_collision) { m_jump_process = true; }
-        if (m_jump_process && m_jump) { m_input.y = -10; ++jump_counter; }
-        if (jump_counter > m_jump_duration || !m_jump || m_up_collision) { m_jump_process = false; jump_counter = 0; }
+        if (m_jump && m_down_collision) { m_is_jumping = true; }
+        if (m_is_jumping && m_jump) { m_input.y = -10; ++jump_counter; }
+        if (jump_counter > m_jump_duration || !m_jump || m_up_collision) { m_is_jumping = false; jump_counter = 0; }
 
         // shoot
-        if (shoot_counter >= 50) { m_is_shooting = false; }
-        if (m_shoot && shoot_counter > 100) { 
+        if (shoot_counter >= shoot_cooldown / 2) { m_is_shooting = false; }
+        if (m_shoot && shoot_counter > shoot_cooldown) { 
             shoot_counter = 0;
             m_is_shooting = true;
-            std::unique_ptr<Projectile> projectile{new Projectile{m_position, m_current_proj, 10}};
+            int speed_modifier = 0;
+            if (m_move_left || m_move_right) { speed_modifier = m_max_speed; }
+            std::unique_ptr<Projectile> projectile{new Projectile{m_position, m_current_proj_type, speed_modifier, 10}};
             m_projectiles.emplace_back(std::move(projectile)); 
         }
 
@@ -70,17 +72,12 @@ public:
         
         velocity += m_input;
         velocity.y += m_gravity;
-
-        // resolve collisions
-        if (m_up_collision) { velocity.y = velocity.y < 0 ? 0 : velocity.y; }
-        if (m_down_collision) { velocity.y = velocity.y > 0 ? 0 : velocity.y; }
-        if (m_left_collision) { velocity.x = velocity.x < 0 ? 0 : velocity.x; }
-        if (m_right_collision) { velocity.x = velocity.x > 0 ? 0 : velocity.x; }
-        
+    
         velocity.x = std::max(-m_max_speed, std::min(velocity.x, m_max_speed));
         velocity.y = std::max(-m_max_speed, std::min(velocity.y, m_max_speed));
     
         // set position
+        resolve_collisions();
         m_position += velocity;                                      // update position
 
 
@@ -92,7 +89,7 @@ public:
             if (velocity.y < 0) { ++velocity.y; }
             if (velocity.y > 0) { --velocity.y; }
         }
-    
+
         update_position();
         reset_collisions();  
         
@@ -150,15 +147,16 @@ private:
 
     // jump
     bool m_jump = false;
-    bool m_jump_process = false;
+    bool m_is_jumping = false;
     int jump_counter = 0;
-    int m_jump_duration = 60;
+    int m_jump_duration = 30;
 
     // shoot
     bool m_shoot = false;
     bool m_is_shooting = false;
     int shoot_counter = 0;
-    ProjectileType m_current_proj = ProjectileType::bubble;
+    int shoot_cooldown = 50;
+    ProjectileType m_current_proj_type = ProjectileType::bubble;
     // std::vector<std::unique_ptr<Projectile>> m_projectiles{};
 
     int m_max_hitpoints = 5;

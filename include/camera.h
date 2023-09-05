@@ -25,12 +25,11 @@ public:
         left_border += margine;
         right_border -= margine;
         
-        double x_speed_modifier = 1;
 
-        int position_x = static_cast<int>(m_owner->m_position.x * scaler);
-        int position_y = static_cast<int>(m_owner->m_position.y * scaler);
-        int position_w = static_cast<int>(m_owner->m_position.w * scaler);
-        int position_h = static_cast<int>(m_owner->m_position.h * scaler);
+        double position_x = static_cast<double>(m_owner->m_position.x * scaler);
+        double position_y = static_cast<double>(m_owner->m_position.y * scaler);
+        double position_w = static_cast<double>(m_owner->m_position.w * scaler);
+        double position_h = static_cast<double>(m_owner->m_position.h * scaler);
 
         right_border = right_border - position_w;
         
@@ -38,31 +37,52 @@ public:
         
         if (
             position_x > right_border || 
-            ( m_owner->m_position.right_direction == true && 
-            position_x > left_border && position_x > left_border + position_w )
+            ( m_owner->m_position.right_direction == true && position_x > left_border + position_w )
         ) {
-            modifier.x -= (m_owner->max_speed() * 2) * x_speed_modifier;
+            // x_speed_modifier = position_x - left_border;
+            modifier.x -= (m_owner->max_speed() + x_speed_modifier);
         } 
         else if (
             position_x < left_border || 
-            ( m_owner->m_position.right_direction == false && 
-            position_x < right_border && position_x < right_border - position_w )
+            ( m_owner->m_position.right_direction == false && position_x < right_border - position_w )
         ) {
-            modifier.x += (m_owner->max_speed() * 2) * x_speed_modifier;
+            // x_speed_modifier = position_x - right_border;
+            modifier.x += (m_owner->max_speed() + x_speed_modifier);
         }
         
         /* ----- vertical ----- */
         if (position_y > bottom_border) {
-            modifier.y -= (m_owner->max_speed() * 2) * x_speed_modifier;
+            modifier.y -= (m_owner->max_speed()) * y_speed_modifier;
         } 
         else if (position_y < top_border) {
-            modifier.y += (m_owner->max_speed() * 2) * x_speed_modifier;
+            modifier.y += (m_owner->max_speed()) * y_speed_modifier;
         }
+
+        if (x_speed_modifier > 15) { x_speed_modifier = 15; }
+        if (y_speed_modifier > 15) { y_speed_modifier = 15; }
+        
+        if ((position_x > right_border || ( m_owner->m_position.right_direction == true && position_x > left_border + position_w ))
+            || 
+            (position_x < left_border || ( m_owner->m_position.right_direction == false && position_x < right_border - position_w )) 
+            || x_speed_modifier < 0
+        ) { x_speed_modifier++; }
+        else if (x_speed_modifier > 0) { x_speed_modifier--; }
+        if ((position_y > bottom_border) || (position_y < top_border) 
+            || y_speed_modifier < 0
+        ) { y_speed_modifier++; }
+        else if (y_speed_modifier > 0) { y_speed_modifier--; }
+
+        std::cout << "x: " << position_x << " y: " << position_y << " " << x_speed_modifier << std::endl;
 
     }
 
 private: 
     Entity *m_owner; 
+
+    int counter = 0;
+
+    double x_speed_modifier = 1;
+    double y_speed_modifier = 1;
 
 };
 

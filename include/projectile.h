@@ -18,7 +18,7 @@ enum class ProjectileType {
 class Projectile : public Entity {
 public:
 
-    Projectile(Position2D position, ProjectileType type, int h_modifier) {
+    Projectile(Position2D position, ProjectileType type, int speed_modifier, int h_modifier) {
         
         m_start_position = position;
 
@@ -36,8 +36,8 @@ public:
             m_texture = ProjectileTexture::projectile_bubble_texture;
             m_position.w = 10;
             m_position.h = 10; 
-            m_max_speed = 5;
-            m_range = 100;
+            m_max_speed = 8 + speed_modifier;
+            m_range = 140;
 
             break;
         default:
@@ -49,12 +49,12 @@ public:
             m_texture = ProjectileTexture::projectile_bubble_texture;
             m_position.w = 10;
             m_position.h = 10;
-            m_max_speed = 5;
-            m_range = 100;
+            m_max_speed = 8 + speed_modifier;
+            m_range = 150;
         }
     }
 
-    ~Projectile() { std::cout << "done" << std::endl; }
+    ~Projectile() { }
 
     void update() override {
         if (m_position.right_direction) { m_position.x += m_max_speed; }

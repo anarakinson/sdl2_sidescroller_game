@@ -5,6 +5,9 @@
 
 class Vector2D {
 public:
+    Vector2D() {}
+    Vector2D(int x, int y) { x = x; y = y; }
+
     int x = 0;
     int y = 0;
 
@@ -150,3 +153,25 @@ public:
     }    
 
 };
+
+
+inline Position2D operator + (Position2D lhs, const Vector2D &rhs) {
+    lhs.x += rhs.x;
+    lhs.y += rhs.y;
+    return lhs;
+}    
+inline Position2D operator - (Position2D lhs, const Vector2D &rhs) {
+    lhs.x -= rhs.x;
+    lhs.y -= rhs.y;
+    return lhs;
+}    
+inline Position2D operator * (Position2D lhs, const Vector2D &rhs) {
+    lhs.x *= rhs.x;
+    lhs.y *= rhs.y;
+    return lhs;
+}    
+inline Position2D operator / (Position2D lhs, const Vector2D &rhs) {
+    lhs.x /= rhs.x;
+    lhs.y /= rhs.y;
+    return lhs;
+}    

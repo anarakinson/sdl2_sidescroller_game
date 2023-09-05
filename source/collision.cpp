@@ -20,10 +20,10 @@ bool Collision::is_collide(const Position2D &A, const Position2D &B) {
 bool Collision::is_stuck(const Position2D &A, const Position2D &B) {
 
     if (
-        A.left_side() < B.right_side() - 4 &&
-        A.right_side() > B.left_side() + 4 &&
-        A.up_side() < B.down_side() - 4 &&
-        A.down_side() > B.up_side() + 4 
+        A.left_side() < B.right_side() - 3 &&
+        A.right_side() > B.left_side() + 3 &&
+        A.up_side() < B.down_side() - 3 &&
+        A.down_side() > B.up_side() + 3 
     ) {
         return true;
     }

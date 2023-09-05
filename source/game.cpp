@@ -86,12 +86,14 @@ void Game::update() {
     }
     
     // collisions for entities
-    for (auto &entity : m_content) {
+    for (int i = 0; i < m_content.size(); ++i) {
+        auto &entity = m_content[i];
 
         entity->set_scale(m_scale);     
         update_and_collide(entity, modifier);
         
-        for (auto &other_entity : m_content) {
+        for (int j = i + 1; j < m_content.size(); ++j) {
+            auto &other_entity = m_content[j];
             if (
                 entity->index != other_entity->index &&                     // not compare entity with itself
                 entity->type() != "tile" &&                                 // not compare tiles
@@ -125,7 +127,7 @@ void Game::render() {
     
     // players projectiles
     for (auto &projectile : m_player->m_projectiles) {
-        { projectile->render(); }
+        projectile->render();
     }
     // Entities
     for (auto &entity : m_content) {

@@ -12,10 +12,10 @@
 constexpr static int width = 800;
 constexpr static int height = 600;
 // set updates per second
-constexpr static int UPS = 240;  
+constexpr static int UPS = 120;  
 constexpr static int update_delay = 1000 / UPS;
 // set frame rate
-constexpr static int FPS = 60;   
+constexpr static int FPS = 30;   
 constexpr static int frame_delay = 1000 / FPS;
 
 
