@@ -66,7 +66,7 @@ public:
     void render() override {
         if (!m_position.right_direction) { m_flip = SDL_FLIP_HORIZONTAL; }
         else { m_flip = SDL_FLIP_NONE; }
-
+        std::cout << "rendered" << std::endl;
         SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
     }
 
