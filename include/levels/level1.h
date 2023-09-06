@@ -33,11 +33,11 @@ namespace level1 {
         game.add_background_layer(std::move(background_layer1));
 
         // add enemies
-        std::unique_ptr<Enemy> enemy{new Enemy{100, 100, 64, 64, enemy_texture}};
+        std::unique_ptr<Enemy> enemy{new Enemy{300, 300, 64, 64, enemy_texture}};
         game.add_entity(std::move(enemy));
 
         for (int i = 0; i < 5; ++i) {
-            std::unique_ptr<Enemy> enemy1{new Enemy{100 + i, 100 + i, 32, 32, enemy_texture}};
+            std::unique_ptr<Enemy> enemy1{new Enemy{300 + i, 300 + i, 32, 32, enemy_texture}};
             game.add_entity(std::move(enemy1));
         }
 

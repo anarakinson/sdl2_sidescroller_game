@@ -27,9 +27,7 @@ public:
         
         set_animation_frames();
     }
-    ~Player() {
-        SDL_DestroyTexture(m_texture);
-    }
+    ~Player() { }
 
     void init() override {}
     void update() override {
@@ -132,7 +130,21 @@ public:
 
     void update_counters() {
         ++shoot_counter;
+        ++invulnerable_counter;
+        if (shoot_counter > 200000000) { shoot_counter = 500; }
+        if (invulnerable_counter > 200000000) { invulnerable_counter = 500; }
     }
+
+    int hitpoints() { return m_hitpoints; }
+    int max_hitpoints() { return m_max_hitpoints; }
+    void hitted() {
+        if (invulnerable_counter > 50) { 
+            --m_hitpoints; 
+            invulnerable_counter = 0;
+        }
+    }
+
+    ProjectileType current_projectile_type() { return m_current_proj_type; }
 
     void set_animation_frames();
 
@@ -161,6 +173,7 @@ private:
 
     int m_max_hitpoints = 5;
     int m_hitpoints = m_max_hitpoints;
+    int invulnerable_counter = 0;
 
     int m_gravity = 0;
 

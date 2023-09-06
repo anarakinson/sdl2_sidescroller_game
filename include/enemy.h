@@ -24,9 +24,7 @@ public:
         m_src_rect.h = 140; 
         
     }
-    ~Enemy() {
-        SDL_DestroyTexture(m_texture);
-    }
+    ~Enemy() { }
 
     void init() override {}
     void update() override { 

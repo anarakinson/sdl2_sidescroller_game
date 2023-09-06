@@ -40,6 +40,8 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
             std::cout << "Audio start" << std::endl;
         }
 
+        m_ui = std::unique_ptr<UI>(new UI{});
+
         // add static textures
         ProjectileTexture::load_textures();
 
@@ -127,6 +129,8 @@ void Game::update() {
         update_and_collide(entity, modifier);
     }
 
+    m_ui->update();
+
 }
 
 
@@ -153,6 +157,8 @@ void Game::render() {
     for (auto &entity : m_tiles) {
         if (check_entity_position(entity)) { entity->render(); }
     }
+
+    m_ui->render();
     
     SDL_RenderPresent(TextureManager::renderer);
 }
@@ -251,6 +257,7 @@ void Game::update_and_collide(const std::unique_ptr<Entity> &entity, Vector2D mo
     ) {
         entity->collide(m_player->collider());
         m_player->collide(entity->collider());
+        if (entity->type() == "enemy") { m_player->hitted(); }
         // std::cout << entity->index << " ";
         // m_player->print_data();
     }

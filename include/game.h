@@ -3,6 +3,7 @@
 #include <entity.h>
 #include <player.h>
 #include <camera.h>
+#include <ui.h>
 #include <background.h>
 #include <projectile.h>
 #include <collision.h>
@@ -42,6 +43,11 @@ public:
     void add_player(std::unique_ptr<Player> &&player) {
         m_player = std::move(player);
         m_camera.attach(m_player.get());
+        m_ui->attach(m_player.get());
+
+        SDL_Texture *empty_texture = TextureManager::LoadTexture("assets/UI/HeartUIEmpty.png");
+        SDL_Texture *full_texture = TextureManager::LoadTexture("assets/UI/HeartUIFull.png");
+        m_ui->set_health_texture(empty_texture, full_texture);
     }
 
     bool is_running() { return m_running; } 
@@ -72,6 +78,7 @@ private:
 
     ObjectStatementManager statement_manager{};
     Camera m_camera{};
+    std::unique_ptr<UI> m_ui;
 
     inline void update_and_collide(const std::unique_ptr<Entity> &entity, Vector2D modifier);
     inline bool check_entity_position(const std::unique_ptr<Entity> &entity);

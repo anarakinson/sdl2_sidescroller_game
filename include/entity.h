@@ -11,7 +11,10 @@
 class Entity {
 public:
     explicit Entity() { index = counter++; };
-    virtual ~Entity() noexcept {  }
+    virtual ~Entity() noexcept {
+        SDL_DestroyTexture(m_texture);
+        // std::cout << "Destructed" << index << std::endl;
+    }
 
     virtual void init() {}
     virtual void update() {}

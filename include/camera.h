@@ -70,7 +70,7 @@ public:
         ) { y_speed_modifier += 1; }
         else if (y_speed_modifier > 0) { y_speed_modifier -= 1; }
 
-        std::cout << "x: " << position_x << " y: " << position_y << " " << x_speed_modifier << std::endl;
+        // std::cout << "x: " << position_x << " y: " << position_y << " " << x_speed_modifier << std::endl;
 
     }
 
