@@ -40,10 +40,11 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
             std::cout << "Audio start" << std::endl;
         }
 
-        m_ui = std::unique_ptr<UI>(new UI{});
 
         // add static textures
         ProjectileTexture::load_textures();
+        
+        m_ui = std::unique_ptr<UI>(new UI{});
 
         m_running = true;                                         // set game running
 

@@ -27,7 +27,9 @@ public:
         
         set_animation_frames();
     }
-    ~Player() { }
+    ~Player() { 
+        
+    }
 
     void init() override {}
     void update() override {
