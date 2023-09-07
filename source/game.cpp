@@ -44,6 +44,7 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
         // add static textures
         ProjectileTexture::load_textures();
         
+        // add UI
         m_ui = std::unique_ptr<UI>(new UI{});
 
         m_running = true;                                         // set game running
