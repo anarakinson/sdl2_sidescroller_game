@@ -17,6 +17,9 @@ public:
 
         m_texture = texture;
         m_max_speed = 1;
+
+        m_max_hitpoints = 3;
+        m_hitpoints = m_max_hitpoints;
         
         m_src_rect.x = 180;        // source image coordinates on tileset 
         m_src_rect.y = 90; 
@@ -49,6 +52,7 @@ public:
         SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect, &m_dst_rect, m_angle, &m_center, m_flip);
     }
     std::string type() override { return "enemy"; }
+
 
 private:
 

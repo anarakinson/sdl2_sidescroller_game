@@ -97,9 +97,13 @@ public:
     static int counter;
     int index;
 
-    int max_speed() { return m_max_speed; }
+    int max_speed() { return m_max_speed; } 
+    void damaged(int damage = 1) { m_hitpoints -= damage; }
+    bool is_dead() { return m_hitpoints <= 0; }
+
     Vector2D velocity{};
     Position2D m_position{};
+
 
 protected:
     
@@ -123,5 +127,9 @@ protected:
     bool m_up_collision = false;
     bool m_left_collision = false;
     bool m_right_collision = false;
+
+    int m_max_hitpoints = 5;
+    int m_hitpoints = m_max_hitpoints;
+    int invulnerable_counter = 0;
 
 };

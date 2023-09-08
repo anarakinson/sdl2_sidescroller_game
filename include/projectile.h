@@ -38,6 +38,7 @@ public:
             m_position.h = 10; 
             m_max_speed = 8 + speed_modifier;
             m_range = 140;
+            m_damage = 1;
 
             break;
         default:
@@ -50,11 +51,14 @@ public:
             m_position.w = 10;
             m_position.h = 10;
             m_max_speed = 8 + speed_modifier;
-            m_range = 150;
+            m_range = 140;
+            m_damage = 1;
         }
     }
 
     ~Projectile() { }
+
+    std::string type() { return "projectile"; }
 
     void update() override {
         if (m_position.right_direction) { m_position.x += m_max_speed; }
@@ -73,12 +77,15 @@ public:
         return m_counter > m_range;
     }
 
+    int damage() { return m_damage; }
+
     // static SDL_Texture *projectile_bubble_texture;
 
 private:
     Position2D m_start_position{};
     int m_range = 0;
     int m_counter = 0;
+    int m_damage = 1;
 
 };
 

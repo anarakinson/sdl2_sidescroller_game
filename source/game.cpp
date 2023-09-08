@@ -61,7 +61,7 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
 void Game::update() {
     // update state
 
-    // modifier for move environment 
+    // modifier for moving environment 
     Vector2D modifier{};
     m_camera.update_position(modifier, m_scale);
     // m_camera.update_position(modifier, (m_w / 3), (m_w / 3) * 2 - m_player->m_position.w, (m_h / 3), (m_h / 3) * 2 - m_player->m_position.h);
@@ -97,6 +97,12 @@ void Game::update() {
             if (Collision::is_collide(projectile->collider(), entity->collider())) { 
                 explode = true; 
                 entity->collide(projectile->collider()); 
+                if (entity->type() == "enemy") {
+                    entity->damaged(projectile->damage());
+                    if (entity->is_dead()) {
+                        m_content.erase(m_content.begin() + j);
+                    }
+                }
             }
         }
         if (explode) { m_player->projectile_explode(i); }
@@ -208,7 +214,7 @@ void Game::handle_events() {
                 m_player->shoot(true); 
             }
             if (event.key.keysym.sym == SDLK_q) { 
-                m_camera.attach(m_content[1].get());
+                if (m_content.size() > 0) { m_camera.attach(m_content[0].get()); }
             }
             if (event.key.keysym.sym == SDLK_w) { 
                 if (m_scale < 1.8) m_scale += 0.01;
