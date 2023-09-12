@@ -20,8 +20,10 @@ public:
         m_position.w = w;
         m_position.h = h;
         
-        m_max_speed = 4;
-
+        m_max_speed = 4;    
+        m_max_hitpoints = 5;
+        m_hitpoints = m_max_hitpoints;
+        
         m_texture = texture;
         std::cout << "Player character created" << std::endl;
         
@@ -67,9 +69,8 @@ public:
         }
 
         // apply gravity
-        if (m_down_collision) { m_gravity = 0; } 
-        else { m_gravity = std::min(++m_gravity, m_max_speed + 2); } 
-        
+        apply_gravity();
+
         velocity += m_input;
         velocity.y += m_gravity;
     
@@ -172,12 +173,6 @@ private:
     int shoot_cooldown = 50;
     ProjectileType m_current_proj_type = ProjectileType::bubble;
     // std::vector<std::unique_ptr<Projectile>> m_projectiles{};
-
-    int m_max_hitpoints = 5;
-    int m_hitpoints = m_max_hitpoints;
-    int invulnerable_counter = 0;
-
-    int m_gravity = 0;
 
     Vector2D m_input{};
 

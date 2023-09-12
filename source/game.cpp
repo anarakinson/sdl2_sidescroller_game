@@ -215,6 +215,7 @@ void Game::handle_events() {
             }
             if (event.key.keysym.sym == SDLK_q) { 
                 if (m_content.size() > 0) { m_camera.attach(m_content[0].get()); }
+                else { m_camera.attach(m_player.get()); }
             }
             if (event.key.keysym.sym == SDLK_w) { 
                 if (m_scale < 1.8) m_scale += 0.01;

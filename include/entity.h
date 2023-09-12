@@ -101,6 +101,11 @@ public:
     void damaged(int damage = 1) { m_hitpoints -= damage; }
     bool is_dead() { return m_hitpoints <= 0; }
 
+    void apply_gravity() {
+        if (m_down_collision) { m_gravity = 0; } 
+        else { m_gravity = std::min(++m_gravity, m_max_speed + 2); } 
+    }
+
     Vector2D velocity{};
     Position2D m_position{};
 
@@ -131,5 +136,7 @@ protected:
     int m_max_hitpoints = 5;
     int m_hitpoints = m_max_hitpoints;
     int invulnerable_counter = 0;
+    
+    int m_gravity = 0;
 
 };
