@@ -46,7 +46,7 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
         
         // add UI
         m_ui = std::unique_ptr<UI>(new UI{});
-        init_menu(menu);
+        init_menu(m_menu);
 
         m_running = true;                                         // set game running
 
@@ -62,7 +62,7 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
 void Game::update() {
     // if paused:
     if (is_paused()) {
-        menu->update();
+        m_menu->update();
         return;
     }
     // update state
@@ -181,7 +181,7 @@ void Game::render() {
     m_ui->render();
     
     if (is_paused()) {
-        menu->render();
+        m_menu->render();
     } 
     SDL_RenderPresent(TextureManager::renderer);
 }
@@ -319,10 +319,10 @@ void Game::process_menu_input(SDL_Event &event) {
             
         }
         if (event.key.keysym.sym == SDLK_UP) { 
-            
+            m_menu->arrow_up();
         }
         else if (event.key.keysym.sym == SDLK_DOWN) { 
-            
+            m_menu->arrow_down();
         } 
         if (event.key.keysym.sym == SDLK_ESCAPE) { 
             m_paused = !m_paused;
@@ -361,8 +361,12 @@ void Game::init_menu(std::unique_ptr<menu::Menu> &menu) {
     std::unique_ptr<menu::Button> exit{ new menu::Button{760, 40, 180, 40, menu_texture} };
     std::unique_ptr<menu::Button> resume{ new menu::Button{40, 40, 180, 40, menu_texture} };
 
+    std::unique_ptr<menu::Arrow> arrow{ new menu::Arrow{430, 280, 70, 60, menu_texture} };
+
     menu->set_start_btn(std::move(start), m_w / 2 - 50, m_h / 3 + 100, 100, 50);
     menu->set_resume_btn(std::move(resume), m_w / 2 - 50, m_h / 3 + 200, 100, 50);
     menu->set_exit_btn(std::move(exit), m_w / 2 - 50, m_h / 3 + 300, 100, 50);
+
+    menu->set_arrow(std::move(arrow), 50, 50);
 
 }

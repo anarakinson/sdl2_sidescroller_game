@@ -83,7 +83,7 @@ private:
     ObjectStatementManager statement_manager{};
     Camera m_camera{};
     std::unique_ptr<UI> m_ui;
-    std::unique_ptr<menu::Menu> menu{ new menu::Menu{} };
+    std::unique_ptr<menu::Menu> m_menu{ new menu::Menu{} };
 
     inline void init_menu(std::unique_ptr<menu::Menu> &);
     inline void update_and_collide(const std::unique_ptr<Entity> &entity);
