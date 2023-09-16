@@ -10,6 +10,7 @@ add_executable(
     source/collision.cpp
     source/player.cpp
     source/game.cpp
+    source/menu.cpp
 )
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Debug)

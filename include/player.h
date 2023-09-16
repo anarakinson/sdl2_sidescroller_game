@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <math.h>
 
+extern int UOF;
+
 
 class Player : public Entity {
 public:
@@ -92,14 +94,17 @@ public:
         }
 
         update_position();
-        reset_collisions();  
+        reset_collisions(); 
+
+        // update animation frame 
+        ++m_current_frame;
         
     }
     void render() override { 
-        // SDL_RenderCopy(Game::renderer(), m_texture, &m_src_rect, &m_dst_rect);
+        
         if (!m_position.right_direction) { m_flip = SDL_FLIP_HORIZONTAL; }
         else { m_flip = SDL_FLIP_NONE; }
-        
+
         if (m_move_left || m_move_right) {   // walk
             if ((m_current_frame / m_frame_delay_modifier) < 4 || (m_current_frame / m_frame_delay_modifier) >= 9) { m_current_frame = 5 * m_frame_delay_modifier; }
             SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect[m_current_frame / m_frame_delay_modifier], &m_dst_rect, m_angle, &m_center, m_flip);
@@ -112,8 +117,6 @@ public:
             if ((m_current_frame / m_frame_delay_modifier) < 0 || (m_current_frame / m_frame_delay_modifier) >= 4) { m_current_frame = 0 * m_frame_delay_modifier; }
             SDL_RenderCopyEx(TextureManager::renderer, m_texture, &m_src_rect[m_current_frame / m_frame_delay_modifier], &m_dst_rect, m_angle, &m_center, m_flip);
         }
-
-        ++m_current_frame;
 
     }
 
@@ -164,7 +167,7 @@ private:
     bool m_jump = false;
     bool m_is_jumping = false;
     int jump_counter = 0;
-    int m_jump_duration = 30;
+    int m_jump_duration = 40;
 
     // shoot
     bool m_shoot = false;
@@ -178,6 +181,6 @@ private:
 
     SDL_Rect m_src_rect[12];
     int m_current_frame = 0;
-    int m_frame_delay_modifier = 6;
+    int m_frame_delay_modifier = 6 * UOF;
 
 };

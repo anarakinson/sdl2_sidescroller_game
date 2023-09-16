@@ -61,12 +61,14 @@ public:
         if (x_speed_modifier > 15) { x_speed_modifier = 15; }
         if (y_speed_modifier > 15) { y_speed_modifier = 15; }
         
-        if ((position_x > right_border || ( m_owner->m_position.right_direction == true && position_x > left_border + position_w )) || 
+        if (
+            (position_x > right_border || ( m_owner->m_position.right_direction == true && position_x > left_border + position_w )) || 
             (position_x < left_border || ( m_owner->m_position.right_direction == false && position_x < right_border - position_w )) || 
             x_speed_modifier < 0
         ) { x_speed_modifier += 1; }
         else if (x_speed_modifier > 0) { x_speed_modifier -= 1; }
-        if ((position_y > bottom_border) || (position_y < top_border) || y_speed_modifier < 0
+        if (
+            (position_y > bottom_border) || (position_y < top_border) || y_speed_modifier < 0
         ) { y_speed_modifier += 1; }
         else if (y_speed_modifier > 0) { y_speed_modifier -= 1; }
 

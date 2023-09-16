@@ -46,6 +46,7 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
         
         // add UI
         m_ui = std::unique_ptr<UI>(new UI{});
+        init_menu(menu);
 
         m_running = true;                                         // set game running
 
@@ -59,12 +60,23 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
 
 
 void Game::update() {
+    // if paused:
+    if (is_paused()) {
+        menu->update();
+        return;
+    }
     // update state
 
     // modifier for moving environment 
     Vector2D modifier{};
     m_camera.update_position(modifier, m_scale);
-    // m_camera.update_position(modifier, (m_w / 3), (m_w / 3) * 2 - m_player->m_position.w, (m_h / 3), (m_h / 3) * 2 - m_player->m_position.h);
+    for (auto &entity : m_content) {
+        entity->m_position += modifier;
+    }
+    for (auto &entity : m_tiles) {
+        entity->m_position += modifier;
+    }
+
 
     // update background
     int layer_counter = 0;
@@ -106,7 +118,6 @@ void Game::update() {
             }
         }
         if (explode) { m_player->projectile_explode(i); }
-
     }
     
     // collisions for entities
@@ -114,7 +125,7 @@ void Game::update() {
         auto &entity = m_content[i];
 
         entity->set_scale(m_scale);     
-        update_and_collide(entity, modifier);
+        update_and_collide(entity);
         
         for (int j = i + 1; j < m_content.size(); ++j) {
             auto &other_entity = m_content[j];
@@ -134,7 +145,7 @@ void Game::update() {
     // collision for tiles
     for (auto &entity : m_tiles) {
         entity->set_scale(m_scale);
-        update_and_collide(entity, modifier);
+        update_and_collide(entity);
     }
 
     m_ui->update();
@@ -143,6 +154,7 @@ void Game::update() {
 
 
 void Game::render() {
+
     SDL_RenderClear(TextureManager::renderer);
 
     /* ------ rendering ------ */
@@ -168,6 +180,9 @@ void Game::render() {
 
     m_ui->render();
     
+    if (is_paused()) {
+        menu->render();
+    } 
     SDL_RenderPresent(TextureManager::renderer);
 }
 
@@ -191,58 +206,22 @@ void Game::handle_events() {
             break;
         case SDL_KEYDOWN:
             // std::cout << "key down" << std::endl;
-            if (event.key.keysym.sym == SDLK_LEFT) { 
-                m_player->move_left(true); 
-                m_player->move_right(false); 
-            }
-            else if (event.key.keysym.sym == SDLK_RIGHT) { 
-                m_player->move_right(true); 
-                m_player->move_left(false); 
-            }
-            if (event.key.keysym.sym == SDLK_UP) { 
-                m_player->move_up(true); 
-                m_player->move_down(false); 
-            }
-            else if (event.key.keysym.sym == SDLK_DOWN) { 
-                m_player->move_down(true); 
-                m_player->move_up(false); 
-            }
-            if (event.key.keysym.sym == SDLK_z) { 
-                m_player->jump(true); 
-            }
-            if (event.key.keysym.sym == SDLK_x) { 
-                m_player->shoot(true); 
-            }
-            if (event.key.keysym.sym == SDLK_q) { 
-                if (m_content.size() > 0) { m_camera.attach(m_content[0].get()); }
-                else { m_camera.attach(m_player.get()); }
-            }
-            if (event.key.keysym.sym == SDLK_w) { 
-                if (m_scale < 1.8) m_scale += 0.01;
-            }
-            if (event.key.keysym.sym == SDLK_e) { 
-                if (m_scale > 0.2) m_scale -= 0.01;
-            }
-            if (event.key.keysym.sym == SDLK_ESCAPE) { 
-                m_paused = !m_paused;
-            }
+            if (is_paused()) { process_menu_input(event); }
+            else { process_gameloop_input(event); }
             break;
         case SDL_KEYUP:
             // std::cout << "key up" << std::endl; 
-            if (event.key.keysym.sym == SDLK_LEFT) { m_player->move_left(false); }
-            else if (event.key.keysym.sym == SDLK_RIGHT) { m_player->move_right(false); }
-            if (event.key.keysym.sym == SDLK_UP) { m_player->move_up(false); }
-            else if (event.key.keysym.sym == SDLK_DOWN) { m_player->move_down(false); }
-            if (event.key.keysym.sym == SDLK_z) { m_player->jump(false); }
-            if (event.key.keysym.sym == SDLK_x) { m_player->shoot(false); }
-            if (event.key.keysym.sym == SDLK_q) { 
-                m_camera.attach(m_player.get());
+            if (is_paused()) {
+                stop_player();
+                process_menu_input(event);        
             }
+            else { process_gameloop_input(event); }
             break;
         case SDL_KEYDOWN && SDL_KEYUP:
             break;
         default:
             break;
+        
     }
 
 }
@@ -257,9 +236,8 @@ bool Game::check_entity_position(const std::unique_ptr<Entity> &entity) {
 }
 
 // update and collide
-void Game::update_and_collide(const std::unique_ptr<Entity> &entity, Vector2D modifier) {
+void Game::update_and_collide(const std::unique_ptr<Entity> &entity) {
     entity->update();
-    entity->m_position += modifier;  
     if (
         m_player->index != entity->index && 
         Collision::is_collide(m_player->collider(), entity->collider())
@@ -270,4 +248,121 @@ void Game::update_and_collide(const std::unique_ptr<Entity> &entity, Vector2D mo
         // std::cout << entity->index << " ";
         // m_player->print_data();
     }
+}
+
+
+// process gameloop input
+void Game::process_gameloop_input(SDL_Event &event) {
+
+    if (event.type == SDL_KEYDOWN) {
+        if (event.key.keysym.sym == SDLK_LEFT) { 
+            m_player->move_left(true); 
+            m_player->move_right(false); 
+        }
+        if (event.key.keysym.sym == SDLK_RIGHT) { 
+            m_player->move_right(true); 
+            m_player->move_left(false); 
+        }
+        if (event.key.keysym.sym == SDLK_UP) { 
+            m_player->move_up(true); 
+            m_player->move_down(false); 
+        }
+        if (event.key.keysym.sym == SDLK_DOWN) { 
+            m_player->move_down(true); 
+            m_player->move_up(false); 
+        }
+        if (event.key.keysym.sym == SDLK_z) { 
+            m_player->jump(true); 
+        }
+        if (event.key.keysym.sym == SDLK_x) { 
+            m_player->shoot(true); 
+        }
+        if (event.key.keysym.sym == SDLK_q) { 
+            if (m_content.size() > 0) { m_camera.attach(m_content[0].get()); }
+            else { m_camera.attach(m_player.get()); }
+        }
+        if (event.key.keysym.sym == SDLK_w) { 
+            if (m_scale < 1.8) m_scale += 0.01;
+        }
+        if (event.key.keysym.sym == SDLK_e) { 
+            if (m_scale > 0.2) m_scale -= 0.01;
+        }
+        if (event.key.keysym.sym == SDLK_ESCAPE) { 
+            m_paused = !m_paused;
+        }
+    }
+
+    else if (event.type == SDL_KEYUP) { 
+        if (event.key.keysym.sym == SDLK_LEFT) { m_player->move_left(false); }
+        if (event.key.keysym.sym == SDLK_RIGHT) { m_player->move_right(false); }
+        if (event.key.keysym.sym == SDLK_UP) { m_player->move_up(false); }
+        if (event.key.keysym.sym == SDLK_DOWN) { m_player->move_down(false); }
+        if (event.key.keysym.sym == SDLK_z) { m_player->jump(false); }
+        if (event.key.keysym.sym == SDLK_x) { m_player->shoot(false); }
+        if (event.key.keysym.sym == SDLK_q) { 
+            m_camera.attach(m_player.get());
+        }
+    }
+
+}
+
+
+// process menu (pause) input
+void Game::process_menu_input(SDL_Event &event) {
+
+    if (event.type == SDL_KEYDOWN) {
+
+        if (event.key.keysym.sym == SDLK_LEFT) { 
+            
+        }
+        else if (event.key.keysym.sym == SDLK_RIGHT) { 
+            
+        }
+        if (event.key.keysym.sym == SDLK_UP) { 
+            
+        }
+        else if (event.key.keysym.sym == SDLK_DOWN) { 
+            
+        } 
+        if (event.key.keysym.sym == SDLK_ESCAPE) { 
+            m_paused = !m_paused;
+        }
+        
+    }
+
+    else if (event.type == SDL_KEYUP) { 
+
+        if (event.key.keysym.sym == SDLK_LEFT) {  }
+        else if (event.key.keysym.sym == SDLK_RIGHT) {  }
+        if (event.key.keysym.sym == SDLK_UP) {  }
+        else if (event.key.keysym.sym == SDLK_DOWN) {  }     
+    
+    }
+
+}
+
+
+void Game::stop_player() {
+
+    m_player->move_left(false);
+    m_player->move_right(false);
+    m_player->move_up(false);
+    m_player->move_down(false);
+    m_player->jump(false); 
+    m_player->shoot(false);
+
+}
+
+
+void Game::init_menu(std::unique_ptr<menu::Menu> &menu) {
+
+    SDL_Texture *menu_texture = TextureManager::LoadTexture("assets/UI/menu.png");
+    std::unique_ptr<menu::Button> start{ new menu::Button{260, 100, 180, 40, menu_texture} };
+    std::unique_ptr<menu::Button> exit{ new menu::Button{760, 40, 180, 40, menu_texture} };
+    std::unique_ptr<menu::Button> resume{ new menu::Button{40, 40, 180, 40, menu_texture} };
+
+    menu->set_start_btn(std::move(start), m_w / 2 - 50, m_h / 3 + 100, 100, 50);
+    menu->set_resume_btn(std::move(resume), m_w / 2 - 50, m_h / 3 + 200, 100, 50);
+    menu->set_exit_btn(std::move(exit), m_w / 2 - 50, m_h / 3 + 300, 100, 50);
+
 }

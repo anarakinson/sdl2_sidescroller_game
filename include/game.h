@@ -3,6 +3,7 @@
 #include <entity.h>
 #include <player.h>
 #include <camera.h>
+#include <menu.h>
 #include <ui.h>
 #include <background.h>
 #include <projectile.h>
@@ -10,10 +11,12 @@
 #include <statement_manager.h>
 
 #include <iostream>
+#include <memory>
+#include <vector>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
-#include <vector>
 
 
 class Game {
@@ -57,6 +60,7 @@ public:
     int window_width() { return m_w; }
 
 
+
 private:
     SDL_Window *m_window;
     
@@ -79,8 +83,13 @@ private:
     ObjectStatementManager statement_manager{};
     Camera m_camera{};
     std::unique_ptr<UI> m_ui;
+    std::unique_ptr<menu::Menu> menu{ new menu::Menu{} };
 
-    inline void update_and_collide(const std::unique_ptr<Entity> &entity, Vector2D modifier);
+    inline void init_menu(std::unique_ptr<menu::Menu> &);
+    inline void update_and_collide(const std::unique_ptr<Entity> &entity);
     inline bool check_entity_position(const std::unique_ptr<Entity> &entity);
+    inline void process_gameloop_input(SDL_Event &event);
+    inline void process_menu_input(SDL_Event &event);
+    inline void stop_player();
 
 };

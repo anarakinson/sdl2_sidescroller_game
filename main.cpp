@@ -1,8 +1,11 @@
 #include <test.h>
 #include <game.h>
+#include <menu.h>
 #include <levels/level1.h>
 
 #include <iostream>
+#include <memory>
+
 #include <SDL2/SDL.h>
 
 #undef main
@@ -18,6 +21,7 @@ constexpr static int update_delay = 1000 / UPS;
 constexpr static int FPS = 30;   
 constexpr static int frame_delay = 1000 / FPS;
 
+int UOF = UPS / FPS;
 
 int main() {
 
@@ -44,16 +48,12 @@ int main() {
         game.handle_events();
 
         // update all objects
-        if (!game.is_paused()){ 
-            game.update();
-        }
-        // else if (game.is_paused()) {
-        //     game.menu();
-        // }
-
+        game.update();
+        
         // display changes
         if (SDL_GetTicks() - frame_counter >= frame_delay) {
             game.render();
+
             frame_counter = SDL_GetTicks();
         }
 

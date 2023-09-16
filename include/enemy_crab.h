@@ -7,9 +7,9 @@
 #include <string>
 
 
-class Enemy : virtual public Entity {
+class EnemyCrab : virtual public Entity {
 public:
-    Enemy(int x, int y, int w, int h, SDL_Texture *texture) {
+    EnemyCrab(int x, int y, int w, int h, SDL_Texture *texture) {
         m_position.x = x;
         m_position.y = y;
         m_position.w = w;
@@ -27,26 +27,38 @@ public:
         m_src_rect.h = 140; 
         
     }
-    ~Enemy() { }
+    ~EnemyCrab() { }
 
     void init() override {}
     void update() override { 
+
+        if (m_right_collision) { 
+            move_right = false; 
+            m_counter = 0; 
+        }
+        else if (m_left_collision) { 
+            move_right = true;
+            m_counter = 0; 
+        }
+        if (m_counter >= 800) { 
+            move_right = !move_right; 
+            m_counter = 0; 
+        }
         m_position.right_direction = move_right; 
-        if ((m_position.x + m_dst_rect.w) * m_scale >= 800 || m_right_collision) { move_right = false; }
-        else if (m_position.x * m_scale <= 0 || m_left_collision) { move_right = true; }
-        if ((m_position.y + m_dst_rect.h) * m_scale >= 600 || m_down_collision) { move_down = false; }
-        else if (m_position.y * m_scale <= 0 || m_up_collision) { move_down = true; }
+        m_counter++;
 
         if (move_right) { velocity.x = m_max_speed; }
         else { velocity.x = -m_max_speed; }
-        if (move_down) { velocity.y = m_max_speed; }
-        else { velocity.y = -m_max_speed; }
 
         resolve_collisions();
+        apply_gravity();
 
+        velocity.y += m_gravity;
         m_position += velocity;                                      // update position
         update_position();
         reset_collisions();    
+
+        // std::cout << index << " rc- " << m_right_collision << " lc- " << m_left_collision << "move right" << move_right << " counter: " << m_counter << std::endl;
 
     }
     void render() override { 
@@ -57,10 +69,12 @@ public:
     }
     std::string type() override { return "enemy"; }
 
+    
+
 
 private:
 
+    int m_counter = 0;
     bool move_right = true;
-    bool move_down = true;
 
 };

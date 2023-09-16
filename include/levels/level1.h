@@ -5,9 +5,12 @@
 #include <tile.h>
 #include <player.h>
 #include <enemy.h>
+#include <enemy_crab.h>
 #include <background.h>
 
 #include <iostream>
+#include <memory>
+
 #include <SDL2/SDL.h>
 
 
@@ -33,12 +36,17 @@ namespace level1 {
         game.add_background_layer(std::move(background_layer1));
 
         // add enemies
-        std::unique_ptr<Enemy> enemy{new Enemy{300, 300, 64, 64, enemy_texture}};
-        game.add_entity(std::move(enemy));
+        // std::unique_ptr<Enemy> enemy{new Enemy{300, 300, 64, 64, enemy_texture}};
+        // game.add_entity(std::move(enemy));
 
-        for (int i = 0; i < 5; ++i) {
-            std::unique_ptr<Enemy> enemy1{new Enemy{300 + i, 300 + i, 32, 32, enemy_texture}};
-            game.add_entity(std::move(enemy1));
+        {std::unique_ptr<EnemyCrab> enemy{new EnemyCrab{700, 300, 32, 42, enemy_texture}};
+        game.add_entity(std::move(enemy));}
+        {std::unique_ptr<EnemyCrab> enemy{new EnemyCrab{800 * 2, 300, 32, 42, enemy_texture}};
+        game.add_entity(std::move(enemy));}
+
+        for (int i = 0; i < 3; ++i) {
+            std::unique_ptr<Enemy> enemy{new Enemy{300 + i * 10, 300 + i, 32, 32, enemy_texture}};
+            game.add_entity(std::move(enemy));
         }
 
         // add tiles
@@ -47,24 +55,24 @@ namespace level1 {
             game.add_tile(std::move(tile));
         }
         for (int i = 0; i < 1200; ++i) {
-            std::unique_ptr<Tile> tile1{new Tile{i * 64 - 50, 500, 64, 64, tile_texture}};
+            std::unique_ptr<Tile> tile1{new Tile{i * 32 - 50, 500, 32, 32, tile_texture}};
             if (i % 3 == 0) { tile1->hflip(); }
             game.add_tile(std::move(tile1));
         }
         for (int i = 0; i < 120; ++i) {
-            std::unique_ptr<Tile> tile1{new Tile{i * 64 - 50, -10, 64, 64, tile_texture}};
+            std::unique_ptr<Tile> tile1{new Tile{i * 32 - 50, -10, 32, 32, tile_texture}};
             game.add_tile(std::move(tile1));
         }
         for (int i = 0; i < 20; ++i) {
-            std::unique_ptr<Tile> tile1{new Tile{-50, i * 64 - 100, 64, 64, tile_texture}};
+            std::unique_ptr<Tile> tile1{new Tile{-50, i * 32 - 100, 32, 32, tile_texture}};
             game.add_tile(std::move(tile1));
         }
 
-        std::unique_ptr<Tile> tile2{new Tile{164, 500-64, 64, 64, tile_texture}};
+        std::unique_ptr<Tile> tile2{new Tile{164, 500-32, 32, 32, tile_texture}};
         game.add_tile(std::move(tile2));
-        std::unique_ptr<Tile> tile3{new Tile{228, 500-64, 64, 64, tile_texture}};
+        std::unique_ptr<Tile> tile3{new Tile{196, 500-32, 32, 32, tile_texture}};
         game.add_tile(std::move(tile3));
-        std::unique_ptr<Tile> tile4{new Tile{328, 500-64, 64, 64, tile_texture}};
+        std::unique_ptr<Tile> tile4{new Tile{328, 500-32, 32, 32, tile_texture}};
         game.add_tile(std::move(tile4));
 
     }
