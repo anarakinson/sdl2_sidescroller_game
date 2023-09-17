@@ -199,6 +199,7 @@ namespace menu {
                 break;
             }
         }
+        int arrow_choise() { return arrow->choise(); }
         
 
     private:

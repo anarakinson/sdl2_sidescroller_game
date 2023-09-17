@@ -326,6 +326,17 @@ void Game::process_menu_input(SDL_Event &event) {
         } 
         if (event.key.keysym.sym == SDLK_ESCAPE) { 
             m_paused = !m_paused;
+        } 
+        if (event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_x) { 
+            if (m_menu->arrow_choise() == 1) {
+                m_paused = !m_paused;
+            }
+            else if (m_menu->arrow_choise() == 2) {
+                m_running = false;
+            }
+            else if (m_menu->arrow_choise() == 0) {
+                std::cout << "start new game" << std::endl;
+            }
         }
         
     }
