@@ -49,6 +49,19 @@ public:
         if (move_right) { velocity.x = m_max_speed; }
         else { velocity.x = -m_max_speed; }
 
+        if (m_is_damaged && m_damaged_counter <= 30) {
+            ++m_damaged_counter;
+        }
+        if (m_damaged_counter > 30) {
+            m_is_damaged = false;
+            m_damaged_counter = 0;
+
+            m_src_rect.x = 180;        // source image coordinates on tileset 
+            m_src_rect.y = 90; 
+            m_src_rect.w = 140;      // source image width and height on tileset 
+            m_src_rect.h = 140; 
+        }
+
         resolve_collisions();
         apply_gravity();
 
@@ -68,12 +81,24 @@ public:
     }
     std::string type() override { return "enemy"; }
 
-    
+    virtual void damaged(int damage = 1) override { 
+        m_hitpoints -= damage; 
+
+        m_src_rect.x = 0;        // source image coordinates on tileset 
+        m_src_rect.y = 90; 
+        m_src_rect.w = 140;      // source image width and height on tileset 
+        m_src_rect.h = 140; 
+
+        m_is_damaged = true;
+
+    }
 
 
 private:
 
     int m_counter = 0;
     bool move_right = true;
+    bool m_is_damaged = false;
+    int m_damaged_counter = 0;
 
 };
