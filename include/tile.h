@@ -6,6 +6,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+
 #include <string>
 #include <vector>
 
@@ -35,7 +36,6 @@ public:
 
     }
     
-    void init() override {}
     void update() override {
         // reset_collisions();
 

@@ -1,6 +1,5 @@
 #include <test.h>
 #include <game.h>
-#include <menu.h>
 #include <levels/level1.h>
 
 #include <iostream>
@@ -28,8 +27,7 @@ int main() {
     // gametest::test();
 
     // init game
-    static Game game;
-    game.init("game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height);
+    Game game{"game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height};
     
     // load content
     level1::load_level(game);

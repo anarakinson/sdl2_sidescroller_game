@@ -9,6 +9,7 @@ add_executable(
     source/test.cpp
     source/collision.cpp
     source/player.cpp
+    source/camera.cpp
     source/game.cpp
     source/menu.cpp
 )

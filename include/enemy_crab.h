@@ -29,7 +29,6 @@ public:
     }
     ~EnemyCrab() { }
 
-    void init() override {}
     void update() override { 
 
         if (m_right_collision) { 

@@ -10,22 +10,22 @@
 #include <collision.h>
 #include <statement_manager.h>
 
-#include <iostream>
-#include <memory>
-#include <vector>
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 
+#include <iostream>
+#include <memory>
+#include <vector>
+
 
 class Game {
 public:
+    
     Game() {}
+    Game(const char *title, int x, int y, int w, int h, bool foolscreen = false);
     ~Game() { clean(); }
 
-    // initialize game process
-    void init(const char *title, int x, int y, int w, int h, bool foolscreen = false);
     void update();
     void render();
     void clean();

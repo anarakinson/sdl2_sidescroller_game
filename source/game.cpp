@@ -10,7 +10,7 @@ SDL_Renderer *TextureManager::renderer = nullptr;
 SDL_Texture *ProjectileTexture::projectile_bubble_texture = nullptr;
 
 
-void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) {
+Game::Game(const char *title, int x, int y, int w, int h, bool foolscreen) {
 
     m_x = x; 
     m_y = y; 
@@ -49,6 +49,7 @@ void Game::init(const char *title, int x, int y, int w, int h, bool foolscreen) 
         init_menu(m_menu);
 
         m_running = true;                                         // set game running
+        m_paused = true;
 
     }
     else {

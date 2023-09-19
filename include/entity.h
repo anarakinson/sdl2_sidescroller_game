@@ -15,7 +15,6 @@ public:
         // std::cout << "Destructed" << index << std::endl;
     }
 
-    virtual void init() {}
     virtual void update() {}
     virtual void render() {}
 

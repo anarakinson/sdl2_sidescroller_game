@@ -29,7 +29,6 @@ public:
     }
     ~Enemy() { }
 
-    void init() override {}
     void update() override { 
         m_position.right_direction = move_right; 
         if ((m_position.x + m_dst_rect.w) * m_scale >= 800 || m_right_collision) { move_right = false; }
