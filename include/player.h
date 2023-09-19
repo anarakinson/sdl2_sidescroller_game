@@ -12,7 +12,7 @@
 #include <vector>
 
 namespace global {
-    extern int UOF;
+    extern float UOF;
 } // namespace global
 
 

@@ -1,14 +1,14 @@
 #pragma once 
 
-#include <entity.h>
-#include <player.h>
-#include <camera.h>
-#include <menu.h>
-#include <ui.h>
 #include <background.h>
-#include <projectile.h>
+#include <camera.h>
 #include <collision.h>
+#include <entity.h>
+#include <menu.h>
+#include <player.h>
+#include <projectile.h>
 #include <statement_manager.h>
+#include <ui.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -22,7 +22,6 @@
 class Game {
 public:
     
-    Game() {}
     Game(const char *title, int x, int y, int w, int h, bool foolscreen = false);
     ~Game() { clean(); }
 

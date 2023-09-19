@@ -20,10 +20,10 @@ namespace global {
     constexpr static int UPS = 120;  
     constexpr static int update_delay = 1000 / UPS;
     // set frame rate
-    constexpr static int FPS = 30;   
+    constexpr static int FPS = 60;   
     constexpr static int frame_delay = 1000 / FPS;
 
-    int UOF = UPS / FPS;
+    float UOF = 2; 
 
 } // namespace global
 
