@@ -2,32 +2,37 @@
 #include <game.h>
 #include <levels/level1.h>
 
+#include <SDL2/SDL.h>
+
 #include <iostream>
 #include <memory>
-
-#include <SDL2/SDL.h>
 
 #undef main
 
 
-// set window size
-constexpr static int width = 800;
-constexpr static int height = 600;
-// set updates per second
-constexpr static int UPS = 120;  
-constexpr static int update_delay = 1000 / UPS;
-// set frame rate
-constexpr static int FPS = 30;   
-constexpr static int frame_delay = 1000 / FPS;
+// global parameters
+namespace global {
 
-int UOF = UPS / FPS;
+    // set window size
+    constexpr static int width = 800;
+    constexpr static int height = 600;
+    // set updates per second
+    constexpr static int UPS = 120;  
+    constexpr static int update_delay = 1000 / UPS;
+    // set frame rate
+    constexpr static int FPS = 30;   
+    constexpr static int frame_delay = 1000 / FPS;
+
+    int UOF = UPS / FPS;
+
+} // namespace global
 
 int main() {
 
     // gametest::test();
 
     // init game
-    Game game{"game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height};
+    Game game{"game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, global::width, global::height};
     
     // load content
     level1::load_level(game);
@@ -49,7 +54,7 @@ int main() {
         game.update();
         
         // display changes
-        if (SDL_GetTicks() - frame_counter >= frame_delay) {
+        if (SDL_GetTicks() - frame_counter >= global::frame_delay) {
             game.render();
 
             frame_counter = SDL_GetTicks();
@@ -58,8 +63,8 @@ int main() {
         // get frame duration
         update_duration = SDL_GetTicks() - update_start;
         // if frame duration too short - force frame delay
-        if (update_duration < update_delay) {
-            SDL_Delay(update_delay - update_duration);
+        if (update_duration < global::update_delay) {
+            SDL_Delay(global::update_delay - update_duration);
         }
     }
 

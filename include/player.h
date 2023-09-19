@@ -11,7 +11,9 @@
 #include <string>
 #include <vector>
 
-extern int UOF;
+namespace global {
+    extern int UOF;
+} // namespace global
 
 
 class Player : public Entity {
@@ -99,6 +101,6 @@ private:
 
     SDL_Rect m_src_rect[12];
     int m_current_frame = 0;
-    int m_frame_delay_modifier = 6 * UOF;
+    int m_frame_delay_modifier = 6 * global::UOF;
 
 };
