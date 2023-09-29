@@ -19,12 +19,19 @@ public:
     virtual void render() {}
 
     virtual std::string type() { return "basic entity"; }
+    // horizontal flip
     virtual void hflip() {
         if (m_flip == SDL_FLIP_NONE) { m_flip = SDL_FLIP_HORIZONTAL; }
         else if (m_flip == SDL_FLIP_HORIZONTAL) { m_flip = SDL_FLIP_NONE; }
     }
+    // vertical flip
     virtual void vflip() {
         if (m_flip == SDL_FLIP_NONE) { m_flip = SDL_FLIP_HORIZONTAL; }
+        else if (m_flip == SDL_FLIP_HORIZONTAL) { m_flip = SDL_FLIP_NONE; }
+    }
+    // diagonal flip (vertical + horizontal)
+    virtual void dflip() {
+        if (m_flip == SDL_FLIP_NONE) { m_flip = SDL_RendererFlip(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL); }
         else if (m_flip == SDL_FLIP_HORIZONTAL) { m_flip = SDL_FLIP_NONE; }
     }
 
